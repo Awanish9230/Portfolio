@@ -65,8 +65,8 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16 relative" style={{ zIndex: 2147483648 }}>
                     {/* Logo Section */}
-                    <Link to="/" className="text-2xl font-bold text-primary relative" style={{ zIndex: 2147483649 }}>
-                        Portfolio
+                    <Link to="/" className="relative flex items-center" style={{ zIndex: 2147483649 }}>
+                        <img src="/logo.png" alt="Awanish Logo" className="h-10 w-auto" />
                     </Link>
 
                     {/* Desktop Menu */}
