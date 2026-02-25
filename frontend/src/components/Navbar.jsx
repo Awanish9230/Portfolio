@@ -65,8 +65,19 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16 relative" style={{ zIndex: 2147483648 }}>
                     {/* Logo Section */}
-                    <Link to="/" className="relative flex items-center" style={{ zIndex: 2147483649 }}>
-                        <img src="/logo.png" alt="Awanish Logo" className="h-10 w-auto" />
+                    <Link
+                        to="/"
+                        onClick={() => {
+                            if (location.pathname === '/') {
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }
+                            setIsOpen(false);
+                        }}
+                        className="relative flex items-center space-x-3 cursor-pointer group"
+                        style={{ zIndex: 2147483649 }}
+                    >
+                        <img src="/logo.png" alt="Awanish Logo" className="h-10 w-10 object-cover rounded-full shadow-sm group-hover:scale-105 transition-transform" />
+                        <span className="text-2xl font-bold text-primary tracking-tight">Awanish</span>
                     </Link>
 
                     {/* Desktop Menu */}
