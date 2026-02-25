@@ -33,13 +33,28 @@ const Navbar = () => {
 
     const handleScrollToSection = (id) => {
         setIsOpen(false);
-        if (location.pathname !== '/') return;
+        if (location.pathname !== '/') {
+            // If not on home page, use Link to go there
+            return;
+        }
 
-        const element = document.querySelector(id);
+        const element = document.getElementById(id); // Changed to getElementById for robust # selection
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
     };
+
+    // Handle scroll on load if there's a hash in the URL
+    useEffect(() => {
+        if (location.pathname === '/' && location.hash) {
+            setTimeout(() => {
+                const element = document.getElementById(location.hash.substring(1));
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        }
+    }, [location]);
 
     return (
         <nav
