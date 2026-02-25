@@ -11,7 +11,10 @@ connectDB();
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://awanish-6g8o.onrender.com'],
+    credentials: true
+}));
 
 // Static folder for uploads
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
