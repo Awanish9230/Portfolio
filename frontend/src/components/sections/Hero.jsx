@@ -55,7 +55,7 @@ const Hero = () => {
                             I build scalable, responsive, and modern web applications using MongoDB, Express, React, and Node.js.
                         </p>
 
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start flex-wrap mb-8">
+                        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start flex-wrap mb-8">
                             <Link
                                 to="projects"
                                 smooth={true}
@@ -75,34 +75,37 @@ const Hero = () => {
                                     Download Resume
                                 </a>
                             )}
-                            <Link
-                                to="contact"
-                                smooth={true}
-                                offset={-70}
-                                duration={500}
-                                className="px-8 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors cursor-pointer font-medium text-center"
-                            >
-                                Contact Me
-                            </Link>
-                        </div>
 
-                        <div className="flex justify-center md:justify-start space-x-6">
-                            <a
-                                href="https://www.linkedin.com/in/awanish-kumar-verma-33740b295/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-gray-500 hover:text-blue-600 transition-colors"
-                            >
-                                <FaLinkedin size={32} />
-                            </a>
-                            <a
-                                href="https://github.com/Awanish9230"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-gray-500 hover:text-gray-900 transition-colors"
-                            >
-                                <FaGithub size={32} />
-                            </a>
+                            <div className="flex items-center gap-4">
+                                <Link
+                                    to="contact"
+                                    smooth={true}
+                                    offset={-70}
+                                    duration={500}
+                                    className="px-8 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors cursor-pointer font-medium text-center"
+                                >
+                                    Contact Me
+                                </Link>
+
+                                <div className="flex space-x-4 ml-2">
+                                    <a
+                                        href="https://www.linkedin.com/in/awanish-kumar-verma-33740b295/"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-gray-500 hover:text-blue-600 transition-colors"
+                                    >
+                                        <FaLinkedin size={32} />
+                                    </a>
+                                    <a
+                                        href="https://github.com/Awanish9230"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-gray-500 hover:text-gray-900 transition-colors"
+                                    >
+                                        <FaGithub size={32} />
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </motion.div>
                 </div>
