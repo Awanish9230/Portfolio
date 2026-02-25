@@ -17,6 +17,14 @@ const About = () => {
         };
         fetchProfile();
     }, []);
+
+    const getDownloadableResume = (url) => {
+        if (url && url.includes('cloudinary.com')) {
+            return url.replace('/upload/', '/upload/fl_attachment/');
+        }
+        return url;
+    };
+
     return (
         <section id="about" className="py-20 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,8 +72,8 @@ const About = () => {
 
                             {resumeLink && (
                                 <a
-                                    href={resumeLink}
-                                    target="_blank"
+                                    href={getDownloadableResume(resumeLink)}
+                                    // Removed target="_blank" since we are forcing download
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors font-medium"
                                 >

@@ -25,6 +25,13 @@ const Hero = () => {
         }
         return url;
     };
+
+    const getDownloadableResume = (url) => {
+        if (url && url.includes('cloudinary.com')) {
+            return url.replace('/upload/', '/upload/fl_attachment/');
+        }
+        return url;
+    };
     return (
         <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-white pt-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
@@ -59,8 +66,8 @@ const Hero = () => {
                             </Link>
                             {profileData.resume && (
                                 <a
-                                    href={profileData.resume}
-                                    target="_blank"
+                                    href={getDownloadableResume(profileData.resume)}
+                                    // Removed target="_blank" since we are forcing download
                                     rel="noopener noreferrer"
                                     className="px-8 py-3 bg-white text-primary border border-primary rounded-lg shadow-sm hover:bg-indigo-50 transition-colors cursor-pointer font-medium text-center"
                                 >
