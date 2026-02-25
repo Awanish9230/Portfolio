@@ -95,7 +95,7 @@ const Hero = () => {
                         className="relative z-10"
                     >
                         {/* Profile Image */}
-                        <div className="w-64 h-64 md:w-96 md:h-96 bg-indigo-100 rounded-full flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white">
+                        <div className="w-64 h-64 md:w-96 md:h-96 bg-indigo-100 rounded-3xl flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white">
                             <img
                                 src={getOptimizedImage(profileData.profileImage)}
                                 alt="Awanish Kumar Profile"
