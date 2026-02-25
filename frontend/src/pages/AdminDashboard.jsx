@@ -16,7 +16,9 @@ const AdminDashboard = () => {
     const [settingsForm, setSettingsForm] = useState({
         email: user?.email || '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        profileImage: null,
+        resume: null
     });
 
     // Form states
@@ -166,13 +168,18 @@ const AdminDashboard = () => {
         }
 
         try {
-            const { data } = await api.put('/admin/profile', {
-                email: settingsForm.email,
-                password: settingsForm.password || undefined
+            const formData = new FormData();
+            formData.append('email', settingsForm.email);
+            if (settingsForm.password) formData.append('password', settingsForm.password);
+            if (settingsForm.profileImage) formData.append('profileImage', settingsForm.profileImage);
+            if (settingsForm.resume) formData.append('resume', settingsForm.resume);
+
+            const { data } = await api.put('/admin/profile', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
             });
             login(data); // update global auth context
             addToast('Profile updated successfully', 'success');
-            setSettingsForm({ ...settingsForm, password: '', confirmPassword: '' });
+            setSettingsForm({ ...settingsForm, password: '', confirmPassword: '', profileImage: null, resume: null });
         } catch (error) {
             addToast(error.response?.data?.message || 'Failed to update profile', 'error');
         }
@@ -389,9 +396,25 @@ const AdminDashboard = () => {
                                 <input
                                     type="password"
                                     placeholder="Confirm new password"
-                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary"
+                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary mb-4"
                                     value={settingsForm.confirmPassword}
                                     onChange={e => setSettingsForm({ ...settingsForm, confirmPassword: e.target.value })}
+                                />
+                            </div>
+                            <div className="pt-4 border-t border-gray-100">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Profile Image Update (Optional)</label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary mb-3"
+                                    onChange={e => setSettingsForm({ ...settingsForm, profileImage: e.target.files[0] })}
+                                />
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Resume Update (Optional PDF)</label>
+                                <input
+                                    type="file"
+                                    accept=".pdf,.doc,.docx"
+                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary mb-3"
+                                    onChange={e => setSettingsForm({ ...settingsForm, resume: e.target.files[0] })}
                                 />
                             </div>
                             <div className="pt-4">

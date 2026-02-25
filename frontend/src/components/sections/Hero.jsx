@@ -1,7 +1,30 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-scroll';
+import api from '../../utils/api';
 
 const Hero = () => {
+    const [profileData, setProfileData] = useState({ profileImage: '/profile.png', resume: '' });
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const { data } = await api.get('/admin/public-profile');
+                setProfileData(data);
+            } catch (error) {
+                console.error('Failed to fetch profile data');
+            }
+        };
+        fetchProfile();
+    }, []);
+
+    const getOptimizedImage = (url) => {
+        if (url && url.includes('cloudinary.com')) {
+            // Apply Cloudinary transformations: Face crop, 600x600 size, auto format & quality
+            return url.replace('/upload/', '/upload/c_fill,g_face,w_600,h_600,q_auto,f_auto/');
+        }
+        return url;
+    };
     return (
         <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-white pt-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
@@ -24,22 +47,32 @@ const Hero = () => {
                             I build scalable, responsive, and modern web applications using MongoDB, Express, React, and Node.js.
                         </p>
 
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start flex-wrap">
                             <Link
                                 to="projects"
                                 smooth={true}
                                 offset={-70}
                                 duration={500}
-                                className="px-8 py-3 bg-primary text-white rounded-lg shadow-lg hover:bg-indigo-700 transition-colors cursor-pointer font-medium"
+                                className="px-8 py-3 bg-primary text-white rounded-lg shadow-lg hover:bg-indigo-700 transition-colors cursor-pointer font-medium text-center"
                             >
                                 View Projects
                             </Link>
+                            {profileData.resume && (
+                                <a
+                                    href={profileData.resume}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-8 py-3 bg-white text-primary border border-primary rounded-lg shadow-sm hover:bg-indigo-50 transition-colors cursor-pointer font-medium text-center"
+                                >
+                                    Download Resume
+                                </a>
+                            )}
                             <Link
                                 to="contact"
                                 smooth={true}
                                 offset={-70}
                                 duration={500}
-                                className="px-8 py-3 bg-white text-primary border border-primary rounded-lg shadow-sm hover:bg-indigo-50 transition-colors cursor-pointer font-medium"
+                                className="px-8 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors cursor-pointer font-medium text-center"
                             >
                                 Contact Me
                             </Link>
@@ -57,9 +90,9 @@ const Hero = () => {
                         {/* Profile Image */}
                         <div className="w-64 h-64 md:w-96 md:h-96 bg-indigo-100 rounded-full flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white">
                             <img
-                                src="/profile.png"
+                                src={getOptimizedImage(profileData.profileImage)}
                                 alt="Awanish Kumar Profile"
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover object-top"
                             />
                         </div>
 

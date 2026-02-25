@@ -39,12 +39,23 @@ const updateUserProfile = async (req, res) => {
             user.password = req.body.password;
         }
 
+        if (req.files) {
+            if (req.files.profileImage && req.files.profileImage[0]) {
+                user.profileImage = req.files.profileImage[0].path;
+            }
+            if (req.files.resume && req.files.resume[0]) {
+                user.resume = req.files.resume[0].path;
+            }
+        }
+
         const updatedUser = await user.save();
 
         res.json({
             _id: updatedUser._id,
             email: updatedUser.email,
             isAdmin: updatedUser.isAdmin,
+            profileImage: updatedUser.profileImage,
+            resume: updatedUser.resume,
             token: generateToken(updatedUser._id),
         });
     } else {
@@ -52,4 +63,22 @@ const updateUserProfile = async (req, res) => {
     }
 };
 
-module.exports = { authUser, updateUserProfile };
+// @desc    Get public profile data (image & resume)
+// @route   GET /api/admin/public-profile
+// @access  Public
+const getPublicProfile = async (req, res) => {
+    // Assuming there is a primary admin for the portfolio
+    const admin = await User.findOne({ isAdmin: true });
+
+    if (admin) {
+        res.json({
+            profileImage: admin.profileImage || '/profile.png',
+            resume: admin.resume || ''
+        });
+    } else {
+        res.status(404).json({ message: 'Admin profile not found' });
+    }
+};
+
+module.exports = { authUser, updateUserProfile, getPublicProfile };
+

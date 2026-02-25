@@ -16,6 +16,14 @@ const userSchema = mongoose.Schema({
         required: true,
         default: false,
     },
+    profileImage: {
+        type: String,
+        default: '/profile.png',
+    },
+    resume: {
+        type: String,
+        default: '',
+    },
 }, {
     timestamps: true,
 });

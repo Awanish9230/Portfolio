@@ -16,15 +16,17 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: async (req, file) => {
-        const filetypes = /jpg|jpeg|png|mp4|mkv/;
         const extname = path.extname(file.originalname).toLowerCase();
-        
+
         let folder = 'portfolio/images';
         let resource_type = 'image';
 
         if (extname === '.mp4' || extname === '.mkv') {
             folder = 'portfolio/videos';
             resource_type = 'video';
+        } else if (extname === '.pdf' || extname === '.doc' || extname === '.docx') {
+            folder = 'portfolio/documents';
+            resource_type = 'raw';
         }
 
         return {
@@ -36,14 +38,13 @@ const storage = new CloudinaryStorage({
 });
 
 function checkFileType(file, cb) {
-    const filetypes = /jpg|jpeg|png|mp4|mkv/;
+    const filetypes = /jpg|jpeg|png|mp4|mkv|pdf|doc|docx/;
     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
 
-    if (extname && mimetype) {
+    if (extname) {
         return cb(null, true);
     } else {
-        cb('Images and Videos only!');
+        cb('Images, Videos, and Documents only!');
     }
 }
 

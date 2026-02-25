@@ -1,7 +1,22 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaDownload } from 'react-icons/fa';
+import api from '../../utils/api';
 
 const About = () => {
+    const [resumeLink, setResumeLink] = useState('');
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const { data } = await api.get('/admin/public-profile');
+                if (data.resume) setResumeLink(data.resume);
+            } catch (error) {
+                console.error('Failed to fetch profile data');
+            }
+        };
+        fetchProfile();
+    }, []);
     return (
         <section id="about" className="py-20 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,14 +62,17 @@ const About = () => {
                                 ))}
                             </div>
 
-                            <a
-                                href="/resume.pdf" // Placeholder path
-                                download="Awanish_Resume.pdf"
-                                className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors font-medium"
-                            >
-                                <FaDownload className="mr-2" />
-                                Download Resume
-                            </a>
+                            {resumeLink && (
+                                <a
+                                    href={resumeLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors font-medium"
+                                >
+                                    <FaDownload className="mr-2" />
+                                    Download Resume
+                                </a>
+                            )}
                         </div>
                     </div>
                 </motion.div>

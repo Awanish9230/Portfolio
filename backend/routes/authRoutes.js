@@ -1,9 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { authUser, updateUserProfile } = require('../controllers/authController');
+const { authUser, updateUserProfile, getPublicProfile } = require('../controllers/authController');
 const { protect, admin } = require('../middleware/authMiddleware');
+const upload = require('../middleware/uploadMiddleware');
 
 router.post('/login', authUser);
-router.route('/profile').put(protect, admin, updateUserProfile);
+router.get('/public-profile', getPublicProfile);
+router.route('/profile').put(
+    protect,
+    admin,
+    upload.fields([{ name: 'profileImage', maxCount: 1 }, { name: 'resume', maxCount: 1 }]),
+    updateUserProfile
+);
 
 module.exports = router;
