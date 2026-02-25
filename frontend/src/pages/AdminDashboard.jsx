@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import api from '../utils/api';
+import AuthContext from '../context/AuthContext';
 import { useToastStore } from '../components/Toast';
 import { FaPlus, FaTrash, FaEdit } from 'react-icons/fa';
 
@@ -8,7 +9,15 @@ const AdminDashboard = () => {
     const [projects, setProjects] = useState([]);
     const [experiences, setExperiences] = useState([]);
     const [messages, setMessages] = useState([]);
+    const { user, login } = useContext(AuthContext);
     const addToast = useToastStore((state) => state.addToast);
+
+    // Settings State
+    const [settingsForm, setSettingsForm] = useState({
+        email: user?.email || '',
+        password: '',
+        confirmPassword: ''
+    });
 
     // Form states
     const [showProjectForm, setShowProjectForm] = useState(false);
@@ -149,6 +158,26 @@ const AdminDashboard = () => {
         }
     };
 
+    // Settings Handlers
+    const handleSettingsSubmit = async (e) => {
+        e.preventDefault();
+        if (settingsForm.password && settingsForm.password !== settingsForm.confirmPassword) {
+            return addToast('Passwords do not match', 'error');
+        }
+
+        try {
+            const { data } = await api.put('/admin/profile', {
+                email: settingsForm.email,
+                password: settingsForm.password || undefined
+            });
+            login(data); // update global auth context
+            addToast('Profile updated successfully', 'success');
+            setSettingsForm({ ...settingsForm, password: '', confirmPassword: '' });
+        } catch (error) {
+            addToast(error.response?.data?.message || 'Failed to update profile', 'error');
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-100 pt-24 pb-10 px-4">
             <div className="max-w-7xl mx-auto">
@@ -156,7 +185,7 @@ const AdminDashboard = () => {
 
                 {/* Tabs */}
                 <div className="flex space-x-4 mb-8 border-b border-gray-200">
-                    {['projects', 'experience', 'messages'].map((tab) => (
+                    {['projects', 'experience', 'messages', 'settings'].map((tab) => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
@@ -328,6 +357,49 @@ const AdminDashboard = () => {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+                )}
+
+                {activeTab === 'settings' && (
+                    <div className="bg-white p-6 rounded-lg shadow-md max-w-lg">
+                        <h3 className="text-xl font-bold mb-6 text-gray-900">Admin Profile Settings</h3>
+                        <form onSubmit={handleSettingsSubmit} className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Update Email Address</label>
+                                <input
+                                    type="email"
+                                    placeholder="admin@example.com"
+                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary"
+                                    required
+                                    value={settingsForm.email}
+                                    onChange={e => setSettingsForm({ ...settingsForm, email: e.target.value })}
+                                />
+                            </div>
+                            <div className="pt-4 border-t border-gray-100">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">New Password (leave blank to keep current)</label>
+                                <input
+                                    type="password"
+                                    placeholder="Enter new password"
+                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary mb-3"
+                                    value={settingsForm.password}
+                                    onChange={e => setSettingsForm({ ...settingsForm, password: e.target.value })}
+                                />
+
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                                <input
+                                    type="password"
+                                    placeholder="Confirm new password"
+                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary"
+                                    value={settingsForm.confirmPassword}
+                                    onChange={e => setSettingsForm({ ...settingsForm, confirmPassword: e.target.value })}
+                                />
+                            </div>
+                            <div className="pt-4">
+                                <button type="submit" className="w-full py-2 px-4 bg-primary text-white rounded-md hover:bg-indigo-700 transition-colors font-medium">
+                                    Update Profile
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 )}
             </div>
