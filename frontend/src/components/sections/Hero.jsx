@@ -54,11 +54,11 @@ const Hero = () => {
                         transition={{ duration: 0.5, delay: 0.2 }}
                         className="relative z-10"
                     >
-                        {/* Placeholder for Illustration or Profile Image */}
+                        {/* Profile Image */}
                         <div className="w-64 h-64 md:w-96 md:h-96 bg-indigo-100 rounded-full flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white">
                             <img
-                                src="https://ui-avatars.com/api/?name=Awanish+Kumar&background=4f46e5&color=fff&size=512"
-                                alt="Profile"
+                                src="/profile.png"
+                                alt="Awanish Kumar Profile"
                                 className="w-full h-full object-cover"
                             />
                         </div>
