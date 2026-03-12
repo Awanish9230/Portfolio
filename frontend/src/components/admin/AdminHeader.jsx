@@ -2,7 +2,7 @@ import { FaSearch, FaBell, FaUserCircle } from 'react-icons/fa';
 
 const AdminHeader = ({ activeTab }) => {
     return (
-        <header className="h-20 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-neutral-800 fixed top-0 right-0 left-0 z-30 transition-colors">
+        <header className="h-20 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-neutral-800 fixed top-0 right-0 left-0 z-[45] transition-colors">
             <div className="h-full px-8 flex items-center justify-between ml-64">
                 <div>
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white capitalize">
