@@ -20,4 +20,18 @@ api.interceptors.request.use(
     }
 );
 
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            localStorage.removeItem('userInfo');
+            // Check if we're not already on the login page to avoid infinite loops
+            if (!window.location.pathname.includes('admin-login')) {
+                window.location.href = '/admin-login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default api;
