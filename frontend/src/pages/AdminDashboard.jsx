@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import api from '../utils/api';
 import AuthContext from '../context/AuthContext';
 import { useToastStore } from '../components/Toast';
-import { FaPlus, FaTrash, FaEdit, FaChevronRight, FaThLarge, FaThumbtack, FaGripVertical } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaEdit, FaChevronRight, FaThLarge, FaThumbtack, FaGripVertical, FaCog } from 'react-icons/fa';
 import AdminSidebar from '../components/admin/AdminSidebar';
 import AdminHeader from '../components/admin/AdminHeader';
 import StatCards from '../components/admin/StatCards';

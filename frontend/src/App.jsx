@@ -24,7 +24,7 @@ const AppContent = () => {
           <Route path="/project/:id" element={<ProjectDetails />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route
-            path="/admin/dashboard"
+            path="/admin/dashboard/*"
             element={
               <ProtectedRoute>
                 <AdminDashboard />
