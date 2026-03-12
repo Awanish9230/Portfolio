@@ -186,19 +186,19 @@ const AdminDashboard = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 pt-24 pb-10 px-4">
+        <div className="min-h-screen bg-gray-100 dark:bg-background-dark pt-24 pb-10 px-4 transition-colors duration-300">
             <div className="max-w-7xl mx-auto">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Admin Dashboard</h1>
 
                 {/* Tabs */}
-                <div className="flex space-x-4 mb-8 border-b border-gray-200">
+                <div className="flex space-x-4 mb-8 border-b border-gray-200 dark:border-neutral-800">
                     {['projects', 'experience', 'messages', 'settings'].map((tab) => (
                         <button
                             key={tab}
                             onClick={() => setActiveTab(tab)}
-                            className={`pb-4 px-4 font-medium capitalize ${activeTab === tab
+                            className={`pb-4 px-4 font-medium capitalize transition-colors ${activeTab === tab
                                 ? 'text-primary border-b-2 border-primary'
-                                : 'text-gray-500 hover:text-gray-700'
+                                : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                                 }`}
                         >
                             {tab}
@@ -220,26 +220,26 @@ const AdminDashboard = () => {
                         </button>
 
                         {showProjectForm && (
-                            <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-                                <h3 className="text-xl font-bold mb-4">{editingProject ? 'Edit Project' : 'Add New Project'}</h3>
+                            <div className="bg-white dark:bg-surface-dark p-6 rounded-lg shadow-md mb-8 border border-gray-100 dark:border-neutral-800 transition-colors">
+                                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">{editingProject ? 'Edit Project' : 'Add New Project'}</h3>
                                 <form onSubmit={handleProjectSubmit} className="space-y-4">
-                                    <input type="text" placeholder="Title" className="w-full p-2 border rounded" required
+                                    <input type="text" placeholder="Title" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors" required
                                         value={projectForm.title} onChange={e => setProjectForm({ ...projectForm, title: e.target.value })} />
-                                    <input type="text" placeholder="Short Description" className="w-full p-2 border rounded" required
+                                    <input type="text" placeholder="Short Description" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors" required
                                         value={projectForm.shortDescription} onChange={e => setProjectForm({ ...projectForm, shortDescription: e.target.value })} />
-                                    <textarea placeholder="Full Description" className="w-full p-2 border rounded" rows="4" required
+                                    <textarea placeholder="Full Description" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors" rows="4" required
                                         value={projectForm.fullDescription} onChange={e => setProjectForm({ ...projectForm, fullDescription: e.target.value })}></textarea>
-                                    <input type="text" placeholder="Technologies (comma separated)" className="w-full p-2 border rounded" required
+                                    <input type="text" placeholder="Technologies (comma separated)" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors" required
                                         value={projectForm.technologies} onChange={e => setProjectForm({ ...projectForm, technologies: e.target.value })} />
-                                    <input type="url" placeholder="GitHub Link" className="w-full p-2 border rounded"
+                                    <input type="url" placeholder="GitHub Link" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors"
                                         value={projectForm.githubLink} onChange={e => setProjectForm({ ...projectForm, githubLink: e.target.value })} />
-                                    <input type="url" placeholder="Live Link" className="w-full p-2 border rounded"
+                                    <input type="url" placeholder="Live Link" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors"
                                         value={projectForm.liveLink} onChange={e => setProjectForm({ ...projectForm, liveLink: e.target.value })} />
-                                    <input type="text" placeholder="Video URL (YouTube)" className="w-full p-2 border rounded"
+                                    <input type="text" placeholder="Video URL (YouTube)" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors"
                                         value={projectForm.video} onChange={e => setProjectForm({ ...projectForm, video: e.target.value })} />
                                     <div>
-                                        <label className="block text-sm text-gray-600 mb-1">Images (Upload to append)</label>
-                                        <input type="file" multiple accept="image/*" className="w-full p-2 border rounded"
+                                        <label className="block text-sm text-gray-600 dark:text-gray-400 mb-1">Images (Upload to append)</label>
+                                        <input type="file" multiple accept="image/*" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white transition-colors"
                                             onChange={e => setProjectForm({ ...projectForm, images: e.target.files })} />
                                     </div>
                                     <div className="flex space-x-2">
@@ -256,10 +256,10 @@ const AdminDashboard = () => {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {projects.map(project => (
-                                <div key={project._id} className="bg-white p-4 rounded shadow flex flex-col justify-between">
+                                <div key={project._id} className="bg-white dark:bg-surface-dark p-4 rounded shadow border border-gray-100 dark:border-neutral-800 flex flex-col justify-between transition-colors">
                                     <div>
-                                        <h3 className="font-bold text-lg mb-1">{project.title}</h3>
-                                        <p className="text-sm text-gray-600 truncate mb-4">{project.shortDescription}</p>
+                                        <h3 className="font-bold text-lg mb-1 text-gray-900 dark:text-white">{project.title}</h3>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate mb-4">{project.shortDescription}</p>
                                     </div>
                                     <div className="flex justify-end space-x-3">
                                         <button onClick={() => handleProjectEdit(project)} className="text-blue-500 hover:text-blue-700">
@@ -288,18 +288,18 @@ const AdminDashboard = () => {
                         </button>
 
                         {showExperienceForm && (
-                            <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-                                <h3 className="text-xl font-bold mb-4">{editingExperience ? 'Edit Experience' : 'Add New Experience'}</h3>
+                            <div className="bg-white dark:bg-surface-dark p-6 rounded-lg shadow-md mb-8 border border-gray-100 dark:border-neutral-800 transition-colors">
+                                <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">{editingExperience ? 'Edit Experience' : 'Add New Experience'}</h3>
                                 <form onSubmit={handleExperienceSubmit} className="space-y-4">
-                                    <input type="text" placeholder="Title" className="w-full p-2 border rounded" required
+                                    <input type="text" placeholder="Title" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors" required
                                         value={experienceForm.title} onChange={e => setExperienceForm({ ...experienceForm, title: e.target.value })} />
-                                    <input type="text" placeholder="Organization" className="w-full p-2 border rounded" required
+                                    <input type="text" placeholder="Organization" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors" required
                                         value={experienceForm.organization} onChange={e => setExperienceForm({ ...experienceForm, organization: e.target.value })} />
-                                    <textarea placeholder="Description" className="w-full p-2 border rounded" rows="3" required
+                                    <textarea placeholder="Description" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors" rows="3" required
                                         value={experienceForm.description} onChange={e => setExperienceForm({ ...experienceForm, description: e.target.value })}></textarea>
-                                    <input type="text" placeholder="Duration (e.g. June 2023 - Present)" className="w-full p-2 border rounded" required
+                                    <input type="text" placeholder="Duration (e.g. June 2023 - Present)" className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors" required
                                         value={experienceForm.duration} onChange={e => setExperienceForm({ ...experienceForm, duration: e.target.value })} />
-                                    <select className="w-full p-2 border rounded"
+                                    <select className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors"
                                         value={experienceForm.type} onChange={e => setExperienceForm({ ...experienceForm, type: e.target.value })}>
                                         <option value="Internship">Internship</option>
                                         <option value="Training">Training</option>
@@ -321,10 +321,10 @@ const AdminDashboard = () => {
 
                         <div className="space-y-4">
                             {experiences.map(exp => (
-                                <div key={exp._id} className="bg-white p-4 rounded shadow flex justify-between items-center">
+                                <div key={exp._id} className="bg-white dark:bg-surface-dark p-4 rounded shadow border border-gray-100 dark:border-neutral-800 flex justify-between items-center transition-colors">
                                     <div>
-                                        <h3 className="font-bold text-lg">{exp.title}</h3>
-                                        <p className="text-sm text-gray-600">{exp.organization}</p>
+                                        <h3 className="font-bold text-lg text-gray-900 dark:text-white">{exp.title}</h3>
+                                        <p className="text-sm text-gray-600 dark:text-gray-400">{exp.organization}</p>
                                     </div>
                                     <div className="flex space-x-3">
                                         <button onClick={() => handleExperienceEdit(exp)} className="text-blue-500 hover:text-blue-700">
@@ -341,23 +341,23 @@ const AdminDashboard = () => {
                 )}
 
                 {activeTab === 'messages' && (
-                    <div className="bg-white rounded-lg shadow overflow-hidden">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                    <div className="bg-white dark:bg-surface-dark rounded-lg shadow overflow-hidden border border-gray-100 dark:border-neutral-800 transition-colors">
+                        <table className="min-w-full divide-y divide-gray-200 dark:divide-neutral-800">
+                            <thead className="bg-gray-50 dark:bg-neutral-800">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Message</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Name</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Email</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Message</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Date</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
+                            <tbody className="bg-white dark:bg-surface-dark divide-y divide-gray-200 dark:divide-neutral-800">
                                 {messages.map(msg => (
-                                    <tr key={msg._id}>
-                                        <td className="px-6 py-4 whitespace-nowrap">{msg.name}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap">{msg.email}</td>
-                                        <td className="px-6 py-4 max-w-xs truncate">{msg.message}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <tr key={msg._id} className="hover:bg-gray-50 dark:hover:bg-neutral-800/50 transition-colors">
+                                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{msg.name}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{msg.email}</td>
+                                        <td className="px-6 py-4 max-w-xs truncate text-gray-600 dark:text-gray-400">{msg.message}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                             {new Date(msg.createdAt).toLocaleDateString()}
                                         </td>
                                     </tr>
@@ -368,52 +368,51 @@ const AdminDashboard = () => {
                 )}
 
                 {activeTab === 'settings' && (
-                    <div className="bg-white p-6 rounded-lg shadow-md max-w-lg">
-                        <h3 className="text-xl font-bold mb-6 text-gray-900">Admin Profile Settings</h3>
+                    <div className="bg-white dark:bg-surface-dark p-6 rounded-lg shadow-md max-w-lg border border-gray-100 dark:border-neutral-800 transition-colors">
+                        <h3 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">Admin Profile Settings</h3>
                         <form onSubmit={handleSettingsSubmit} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Update Email Address</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Update Email Address</label>
                                 <input
                                     type="email"
                                     placeholder="admin@example.com"
-                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary"
+                                    className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors"
                                     required
                                     value={settingsForm.email}
                                     onChange={e => setSettingsForm({ ...settingsForm, email: e.target.value })}
                                 />
                             </div>
-                            <div className="pt-4 border-t border-gray-100">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">New Password (leave blank to keep current)</label>
+                            <div className="pt-4 border-t border-gray-100 dark:border-neutral-800">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">New Password (leave blank to keep current)</label>
                                 <input
                                     type="password"
                                     placeholder="Enter new password"
-                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary mb-3"
+                                    className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors mb-3"
                                     value={settingsForm.password}
                                     onChange={e => setSettingsForm({ ...settingsForm, password: e.target.value })}
                                 />
-
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirm New Password</label>
                                 <input
                                     type="password"
                                     placeholder="Confirm new password"
-                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary mb-4"
+                                    className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-primary focus:border-primary transition-colors mb-4"
                                     value={settingsForm.confirmPassword}
                                     onChange={e => setSettingsForm({ ...settingsForm, confirmPassword: e.target.value })}
                                 />
                             </div>
-                            <div className="pt-4 border-t border-gray-100">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Profile Image Update (Optional)</label>
+                            <div className="pt-4 border-t border-gray-100 dark:border-neutral-800">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Profile Image Update (Optional)</label>
                                 <input
                                     type="file"
                                     accept="image/*"
-                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary mb-3"
+                                    className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white transition-colors mb-3"
                                     onChange={e => setSettingsForm({ ...settingsForm, profileImage: e.target.files[0] })}
                                 />
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Resume Update (Optional PDF)</label>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Resume Update (Optional PDF)</label>
                                 <input
                                     type="file"
                                     accept=".pdf,.doc,.docx"
-                                    className="w-full p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary mb-3"
+                                    className="w-full p-2 border border-gray-300 dark:border-neutral-700 rounded bg-white dark:bg-neutral-900 text-gray-900 dark:text-white transition-colors mb-3"
                                     onChange={e => setSettingsForm({ ...settingsForm, resume: e.target.files[0] })}
                                 />
                             </div>
