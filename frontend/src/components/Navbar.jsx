@@ -76,7 +76,7 @@ const Navbar = () => {
                         className="relative flex items-center space-x-3 cursor-pointer group"
                         style={{ zIndex: 2147483649 }}
                     >
-                        <img src="/logo.png" alt="Awanish Logo" className="h-10 w-10 object-cover rounded-full shadow-sm group-hover:scale-105 transition-transform" />
+                        <img src="/ee2.jpg" alt="Awanish Logo" className="h-10 w-10 object-cover rounded-full shadow-sm group-hover:scale-105 transition-transform" />
                         <span className="text-2xl font-bold text-primary tracking-tight">Awanish</span>
                     </Link>
 
