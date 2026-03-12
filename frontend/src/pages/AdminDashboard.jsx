@@ -61,8 +61,12 @@ const AdminDashboard = () => {
                 views: statsRes.data.totalViews || 0
             });
         } catch (error) {
-            console.error(error);
-            addToast('Failed to fetch data', 'error');
+            console.error('Fetch Data Error:', error);
+            if (error.response) {
+                console.error('Response Data:', error.response.data);
+                console.error('Response Status:', error.response.status);
+            }
+            addToast(`Failed to fetch data: ${error.message}`, 'error');
         }
     };
 

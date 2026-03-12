@@ -4,6 +4,8 @@ const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
 });
 
+console.log('API Base URL:', api.defaults.baseURL);
+
 api.interceptors.request.use(
     (config) => {
         const userInfo = localStorage.getItem('userInfo');
