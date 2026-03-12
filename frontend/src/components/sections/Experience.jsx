@@ -72,8 +72,8 @@ const Experience = () => {
                                         <div className="hidden md:block w-5/12"></div>
 
                                         {/* Icon */}
-                                        <div className="absolute left-0 md:left-1/2 top-0 w-8 h-8 md:w-10 md:h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg z-10 -translate-x-1/2 md:-translate-x-1/2 mt-1 transition-transform group-hover:scale-110">
-                                            {getIcon(exp.type)}
+                                        <div className="absolute left-0 md:left-1/2 top-4 md:top-0 w-6 h-6 md:w-10 md:h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg z-10 -translate-x-1/2 md:-translate-x-1/2 transition-transform group-hover:scale-110">
+                                            <div className="scale-75 md:scale-100">{getIcon(exp.type)}</div>
                                         </div>
 
                                         <div className="md:w-5/12 bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-gray-100 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary/50">

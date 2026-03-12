@@ -39,8 +39,8 @@ const About = () => {
                         <div className="w-20 h-1 bg-primary mx-auto rounded-full"></div>
                     </div>
 
-                    <div className="flex flex-col md:flex-row items-center gap-12">
-                        <div className="md:w-1/3">
+                    <div className="flex flex-col md:flex-row items-center gap-10 md:gap-12">
+                        <div className="w-full max-w-[280px] sm:max-w-xs md:w-1/3">
                             <div className="aspect-square rounded-2xl overflow-hidden shadow-lg bg-gray-100 dark:bg-neutral-800 relative group">
                                 <img
                                     src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?q=80&w=2070&auto=format&fit=crop"

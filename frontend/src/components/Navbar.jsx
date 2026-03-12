@@ -81,13 +81,13 @@ const Navbar = () => {
                     </Link>
 
                     {/* Desktop Menu */}
-                    <div className="hidden xl:flex items-center space-x-8 relative" style={{ zIndex: 2147483649 }}>
+                    <div className="hidden lg:flex items-center space-x-8 relative" style={{ zIndex: 2147483649 }}>
                         {navLinks.map((link) => (
                             location.pathname === '/' && link.to.startsWith('/#') ? (
                                 <button
                                     key={link.name}
                                     onClick={() => handleScrollToSection(link.to.substring(2))}
-                                    className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors font-medium"
+                                    className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors font-medium text-sm xl:text-base"
                                 >
                                     {link.name}
                                 </button>
@@ -95,7 +95,7 @@ const Navbar = () => {
                                 <Link
                                     key={link.name}
                                     to={link.to}
-                                    className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors font-medium"
+                                    className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors font-medium text-sm xl:text-base"
                                 >
                                     {link.name}
                                 </Link>
@@ -105,7 +105,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile Menu Button - Ultra High Visibility */}
-                    <div className="xl:hidden relative flex items-center space-x-4 z-50 mr-2" style={{ zIndex: 2147483650 }}>
+                    <div className="lg:hidden relative flex items-center space-x-4 z-50 mr-2" style={{ zIndex: 2147483650 }}>
                         <ThemeToggle />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
@@ -125,29 +125,29 @@ const Navbar = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="xl:hidden bg-white dark:bg-background-dark border-t border-gray-100 dark:border-neutral-800 shadow-2xl absolute w-full left-0 top-16 overflow-hidden"
+                        className="lg:hidden bg-white/95 dark:bg-background-dark/95 backdrop-blur-lg border-t border-gray-100 dark:border-neutral-800 shadow-2xl absolute w-full left-0 top-16 overflow-hidden"
                         style={{ zIndex: 2147483646 }}
                     >
-                        <div className="px-4 py-4 space-y-3 relative z-50">
+                        <div className="px-4 py-6 space-y-2 relative z-50">
                             {navLinks.map((link) => (
-                                location.pathname === '/' && link.to.startsWith('/#') ? (
-                                    <button
-                                        key={link.name}
-                                        onClick={() => handleScrollToSection(link.to.substring(2))}
-                                        className="block w-full text-left px-4 py-3 text-base font-bold text-gray-800 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-neutral-800 rounded-lg transition-colors border border-transparent hover:border-gray-100 dark:hover:border-neutral-700"
-                                    >
-                                        {link.name}
-                                    </button>
-                                ) : (
-                                    <Link
-                                        key={link.name}
-                                        to={link.to}
-                                        onClick={() => setIsOpen(false)}
-                                        className="block w-full text-left px-4 py-3 text-base font-bold text-gray-800 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-slate-800 rounded-lg transition-colors border border-transparent hover:border-gray-100 dark:hover:border-slate-700"
-                                    >
-                                        {link.name}
-                                    </Link>
-                                )
+                                <div key={link.name}>
+                                    {location.pathname === '/' && link.to.startsWith('/#') ? (
+                                        <button
+                                            onClick={() => handleScrollToSection(link.to.substring(2))}
+                                            className="block w-full text-left px-6 py-4 text-lg font-bold text-gray-800 dark:text-gray-200 hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/10 rounded-xl transition-all border border-transparent active:scale-[0.98]"
+                                        >
+                                            {link.name}
+                                        </button>
+                                    ) : (
+                                        <Link
+                                            to={link.to}
+                                            onClick={() => setIsOpen(false)}
+                                            className="block w-full text-left px-6 py-4 text-lg font-bold text-gray-800 dark:text-gray-200 hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/10 rounded-xl transition-all border border-transparent active:scale-[0.98]"
+                                        >
+                                            {link.name}
+                                        </Link>
+                                    )}
+                                </div>
                             ))}
                         </div>
                     </motion.div>

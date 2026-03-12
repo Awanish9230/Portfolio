@@ -42,26 +42,26 @@ const Hero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h2 className="text-xl md:text-2xl font-medium text-gray-600 dark:text-gray-400 mb-2">
+                        <h2 className="text-lg sm:text-xl md:text-2xl font-medium text-gray-600 dark:text-gray-400 mb-2">
                             Hello, I'm
                         </h2>
-                        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight leading-tight">
                             Awanish <span className="text-primary">Kumar</span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 font-light">
+                        <p className="text-lg sm:text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-6 md:mb-8 font-light">
                             Full Stack MERN Developer
                         </p>
-                        <p className="text-gray-500 dark:text-gray-400 mb-10 max-w-lg mx-auto md:mx-0 leading-relaxed">
+                        <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mb-8 md:mb-10 max-w-lg mx-auto md:mx-0 leading-relaxed">
                             I build scalable, responsive, and modern web applications using MongoDB, Express, React, and Node.js.
                         </p>
 
-                        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center md:justify-start flex-wrap mb-8">
+                        <div className="flex flex-col sm:flex-row gap-3 md:gap-4 items-center justify-center md:justify-start flex-wrap mb-8">
                             <Link
                                 to="projects"
                                 smooth={true}
                                 offset={-70}
                                 duration={500}
-                                className="px-8 py-3 bg-primary text-white rounded-lg shadow-lg hover:bg-indigo-700 transition-colors cursor-pointer font-medium text-center"
+                                className="w-full sm:w-auto px-8 py-3 bg-primary text-white rounded-lg shadow-lg hover:bg-indigo-700 transition-colors cursor-pointer font-medium text-center"
                             >
                                 View Projects
                             </Link>
@@ -69,31 +69,31 @@ const Hero = () => {
                                 <a
                                     href={getDownloadableResume(profileData.resume)}
                                     rel="noopener noreferrer"
-                                    className="px-8 py-3 bg-white dark:bg-neutral-800 text-primary dark:text-indigo-400 border border-primary dark:border-indigo-400 rounded-lg shadow-sm hover:bg-indigo-50 dark:hover:bg-neutral-700 transition-colors cursor-pointer font-medium text-center"
+                                    className="w-full sm:w-auto px-8 py-3 bg-white dark:bg-neutral-800 text-primary dark:text-indigo-400 border border-primary dark:border-indigo-400 rounded-lg shadow-sm hover:bg-indigo-50 dark:hover:bg-neutral-700 transition-colors cursor-pointer font-medium text-center"
                                 >
                                     Download Resume
                                 </a>
                             )}
 
-                            <div className="flex items-center gap-4">
+                            <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
                                 <Link
                                     to="contact"
                                     smooth={true}
                                     offset={-70}
                                     duration={500}
-                                    className="px-8 py-3 bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-neutral-700 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors cursor-pointer font-medium text-center"
+                                    className="w-full sm:w-auto px-8 py-3 bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-neutral-700 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors cursor-pointer font-medium text-center"
                                 >
                                     Contact Me
                                 </Link>
 
-                                <div className="flex space-x-4 ml-2">
+                                <div className="flex space-x-6 sm:space-x-4 mt-2 sm:mt-0">
                                     <a
                                         href="https://www.linkedin.com/in/awanish-kumar-verma-33740b295/"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                                     >
-                                        <FaLinkedin size={32} />
+                                        <FaLinkedin size={28} className="md:w-8 md:h-8" />
                                     </a>
                                     <a
                                         href="https://github.com/Awanish9230"
@@ -101,7 +101,7 @@ const Hero = () => {
                                         rel="noopener noreferrer"
                                         className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                                     >
-                                        <FaGithub size={32} />
+                                        <FaGithub size={28} className="md:w-8 md:h-8" />
                                     </a>
                                 </div>
                             </div>

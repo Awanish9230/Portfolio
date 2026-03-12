@@ -39,6 +39,8 @@ const AdminDashboard = () => {
         title: '', organization: '', description: '', duration: '', type: 'Job'
     });
 
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
     useEffect(() => {
         fetchData();
     }, [activeTab]);
@@ -226,11 +228,22 @@ const AdminDashboard = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-background-dark transition-colors duration-300">
-            <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-            <AdminHeader activeTab={activeTab} />
+            <AdminSidebar 
+                activeTab={activeTab} 
+                setActiveTab={(tab) => {
+                    setActiveTab(tab);
+                    setIsSidebarOpen(false);
+                }} 
+                isOpen={isSidebarOpen}
+                setIsOpen={setIsSidebarOpen}
+            />
+            <AdminHeader 
+                activeTab={activeTab} 
+                toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+            />
             
-            <main className="ml-64 pt-24 min-h-screen">
-                <div className="p-8 max-w-6xl mx-auto">
+            <main className={`transition-all duration-300 ${isSidebarOpen ? 'ml-0' : 'lg:ml-64'} pt-24 min-h-screen`}>
+                <div className="p-4 md:p-8 max-w-6xl mx-auto">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeTab}
@@ -308,16 +321,20 @@ const AdminDashboard = () => {
                             {/* Projects Tab */}
                             {activeTab === 'projects' && (
                                 <div>
-                                    <div className="flex justify-between items-center mb-6">
-                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">Project Inventory</h3>
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                        <div>
+                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Portfolio Projects</h3>
+                                            <p className="text-xs text-gray-500">Manage and organize your work</p>
+                                        </div>
                                         <button
                                             onClick={() => {
-                                                if (showProjectForm) resetProjectForm();
-                                                else setShowProjectForm(true);
+                                                setEditingProject(null);
+                                                setProjectForm({ title: '', shortDescription: '', fullDescription: '', technologies: '', githubLink: '', liveLink: '', images: [], video: '' });
+                                                setShowProjectForm(true);
                                             }}
-                                            className={`px-4 py-2 rounded-xl text-white font-medium flex items-center transition-all shadow-lg ${showProjectForm ? 'bg-gray-500 shadow-gray-500/20' : 'bg-primary shadow-primary/20'}`}
+                                            className="w-full sm:w-auto px-6 py-3 bg-primary text-white rounded-xl hover:bg-indigo-700 transition-all font-bold shadow-lg shadow-primary/20 flex items-center justify-center"
                                         >
-                                            {showProjectForm ? 'Cancel' : <><FaPlus className="mr-2" /> Add Project</>}
+                                            <FaPlus className="mr-2" /> New Project
                                         </button>
                                     </div>
 
@@ -512,7 +529,8 @@ const AdminDashboard = () => {
                                         <h3 className="font-bold text-gray-900 dark:text-white">Inbound Inquiries</h3>
                                         <span className="bg-primary/10 text-primary text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">{messages.length} Total</span>
                                     </div>
-                                    <table className="min-w-full divide-y divide-gray-100 dark:divide-neutral-800">
+                                    <div className="overflow-x-auto scrollbar-thin">
+                                        <table className="min-w-full divide-y divide-gray-100 dark:divide-neutral-800">
                                         <thead className="bg-gray-50/50 dark:bg-neutral-900/50">
                                             <tr>
                                                 <th className="px-8 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-widest">Sender</th>
@@ -549,7 +567,8 @@ const AdminDashboard = () => {
                                                 </tr>
                                             ))}
                                         </tbody>
-                                    </table>
+                                        </table>
+                                    </div>
                                 </div>
                             )}
 
@@ -596,7 +615,7 @@ const AdminDashboard = () => {
                                                     </div>
                                                 </div>
                                                 <div className="pt-6">
-                                                    <button type="submit" className="w-full py-4 px-6 bg-primary text-white rounded-2xl hover:bg-indigo-700 transition-all font-bold shadow-lg shadow-primary/25">
+                                                    <button type="submit" className="w-full py-4 px-6 bg-primary text-white rounded-2xl hover:bg-indigo-700 transition-all font-bold shadow-lg shadow-primary/25 text-sm sm:text-base">
                                                         Secure & Update Profile
                                                     </button>
                                                 </div>

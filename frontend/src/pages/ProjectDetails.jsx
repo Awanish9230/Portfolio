@@ -53,8 +53,8 @@ const ProjectDetails = () => {
 
                 <div className="bg-white dark:bg-background-dark rounded-2xl shadow-sm overflow-hidden border border-gray-100 dark:border-neutral-800 transition-colors">
                     {/* Media Gallery */}
-                    <div className="p-6 md:p-8 border-b border-gray-100 dark:border-neutral-800">
-                        <div className="mb-6 aspect-video bg-gray-100 dark:bg-neutral-900 rounded-xl overflow-hidden shadow-inner">
+                    <div className="p-4 md:p-8 border-b border-gray-100 dark:border-neutral-800">
+                        <div className="mb-4 md:mb-6 aspect-video bg-gray-100 dark:bg-neutral-900 rounded-xl overflow-hidden shadow-inner">
                             {project.video && activeImage === project.images.length ? (
                                 <iframe
                                     src={project.video.replace('watch?v=', 'embed/')}
@@ -73,12 +73,12 @@ const ProjectDetails = () => {
                         </div>
 
                         {/* Thumbnails */}
-                        <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin">
+                        <div className="flex gap-2 md:gap-4 overflow-x-auto pb-4 pt-2 scrollbar-thin">
                             {project.images.map((img, index) => (
                                 <button
                                     key={index}
                                     onClick={() => setActiveImage(index)}
-                                    className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 transition-all ${activeImage === index ? 'border-primary ring-2 ring-primary/20' : 'border-transparent opacity-70 hover:opacity-100'
+                                    className={`flex-shrink-0 w-16 h-16 md:w-24 md:h-24 rounded-lg overflow-hidden border-2 transition-all ${activeImage === index ? 'border-primary ring-2 ring-primary/20' : 'border-transparent opacity-70 hover:opacity-100'
                                         }`}
                                 >
                                     <img
@@ -91,35 +91,35 @@ const ProjectDetails = () => {
                             {project.video && (
                                 <button
                                     onClick={() => setActiveImage(project.images.length)}
-                                    className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 flex items-center justify-center bg-gray-100 dark:bg-neutral-800 ${activeImage === project.images.length ? 'border-primary ring-2 ring-primary/20' : 'border-transparent opacity-70 hover:opacity-100'
+                                    className={`flex-shrink-0 w-16 h-16 md:w-24 md:h-24 rounded-lg overflow-hidden border-2 flex items-center justify-center bg-gray-100 dark:bg-neutral-800 ${activeImage === project.images.length ? 'border-primary ring-2 ring-primary/20' : 'border-transparent opacity-70 hover:opacity-100'
                                         }`}
                                 >
-                                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400">VIDEO</span>
+                                    <span className="text-[10px] md:text-xs font-bold text-gray-500 dark:text-gray-400 text-center px-1">VIDEO</span>
                                 </button>
                             )}
                         </div>
                     </div>
 
                     <div className="p-6 md:p-8">
-                        <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-8">
-                            <div>
-                                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">{project.title}</h1>
+                        <div className="flex flex-col lg:flex-row justify-between items-start gap-6 mb-8">
+                            <div className="w-full lg:w-2/3">
+                                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">{project.title}</h1>
                                 <div className="flex flex-wrap gap-2">
                                     {project.technologies.map((tech) => (
-                                        <span key={tech} className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-primary dark:text-indigo-400 text-sm font-semibold rounded-full">
+                                        <span key={tech} className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-primary dark:text-indigo-400 text-xs sm:text-sm font-semibold rounded-full">
                                             {tech}
                                         </span>
                                     ))}
                                 </div>
                             </div>
 
-                            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
                                 {project.liveLink && (
                                     <a
                                         href={project.liveLink}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="px-6 py-3 bg-primary text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors flex items-center justify-center font-medium"
+                                        className="w-full sm:w-auto px-6 py-3 bg-primary text-white rounded-lg shadow-md hover:bg-indigo-700 transition-colors flex items-center justify-center font-medium text-sm sm:text-base"
                                     >
                                         <FaExternalLinkAlt className="mr-2" /> Live Demo
                                     </a>
@@ -129,7 +129,7 @@ const ProjectDetails = () => {
                                         href={project.githubLink}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="px-6 py-3 bg-white dark:bg-neutral-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-neutral-700 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors flex items-center justify-center font-medium"
+                                        className="w-full sm:w-auto px-6 py-3 bg-white dark:bg-neutral-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-neutral-700 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors flex items-center justify-center font-medium text-sm sm:text-base"
                                     >
                                         <FaGithub className="mr-2" /> Source Code
                                     </a>
@@ -138,8 +138,8 @@ const ProjectDetails = () => {
                         </div>
 
                         <div className="prose max-w-none text-gray-600 dark:text-gray-400">
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 block border-b border-gray-100 dark:border-neutral-800 pb-2">Description</h3>
-                            <p className="whitespace-pre-line leading-relaxed">
+                            <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-4 block border-b border-gray-100 dark:border-neutral-800 pb-2">Project Description</h3>
+                            <p className="whitespace-pre-line leading-relaxed text-sm sm:text-base">
                                 {project.fullDescription}
                             </p>
                         </div>

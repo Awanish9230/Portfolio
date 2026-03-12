@@ -1,14 +1,22 @@
-import { FaSearch, FaBell, FaUserCircle } from 'react-icons/fa';
+import { FaSearch, FaBell, FaUserCircle, FaBars } from 'react-icons/fa';
 
-const AdminHeader = ({ activeTab }) => {
+const AdminHeader = ({ activeTab, toggleSidebar }) => {
     return (
         <header className="h-20 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-md border-b border-gray-200 dark:border-neutral-800 fixed top-0 right-0 left-0 z-[45] transition-colors">
-            <div className="h-full px-8 flex items-center justify-between ml-64">
-                <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white capitalize">
-                        {activeTab}
-                    </h2>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Manage your portfolio content</p>
+            <div className="h-full px-4 md:px-8 flex items-center justify-between lg:ml-64">
+                <div className="flex items-center space-x-4">
+                    <button 
+                        onClick={toggleSidebar}
+                        className="p-2 lg:hidden text-gray-500 hover:text-primary transition-colors"
+                    >
+                        <FaBars size={20} />
+                    </button>
+                    <div>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white capitalize">
+                            {activeTab}
+                        </h2>
+                        <p className="text-[10px] text-gray-500 dark:text-gray-400">Manage your portfolio content</p>
+                    </div>
                 </div>
 
                 <div className="flex items-center space-x-6">

@@ -1,7 +1,7 @@
-import { FaThLarge, FaBriefcase, FaEnvelope, FaCog, FaChartLine } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import { FaThLarge, FaBriefcase, FaEnvelope, FaCog, FaChartLine, FaTimes } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const AdminSidebar = ({ activeTab, setActiveTab }) => {
+const AdminSidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
     const menuItems = [
         { id: 'overview', label: 'Overview', icon: FaChartLine },
         { id: 'projects', label: 'Projects', icon: FaThLarge },
@@ -11,7 +11,26 @@ const AdminSidebar = ({ activeTab, setActiveTab }) => {
     ];
 
     return (
-        <aside className="w-64 bg-white dark:bg-surface-dark border-r border-gray-200 dark:border-neutral-800 h-screen fixed left-0 top-0 pt-20 z-40 transition-colors">
+        <>
+            {/* Mobile Overlay */}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setIsOpen(false)}
+                        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 lg:hidden"
+                    />
+                )}
+            </AnimatePresence>
+
+            <aside className={`w-64 bg-white dark:bg-surface-dark border-r border-gray-200 dark:border-neutral-800 h-screen fixed left-0 top-0 pt-20 z-[51] transition-transform duration-300 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                <div className="absolute top-6 right-4 lg:hidden">
+                    <button onClick={() => setIsOpen(false)} className="p-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                        <FaTimes size={20} />
+                    </button>
+                </div>
             <div className="px-4 py-6">
                 <nav className="space-y-2">
                     {menuItems.map((item) => (
@@ -44,6 +63,7 @@ const AdminSidebar = ({ activeTab, setActiveTab }) => {
                 </div>
             </div>
         </aside>
+        </>
     );
 };
 
