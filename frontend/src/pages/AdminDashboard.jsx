@@ -2,11 +2,11 @@ import { useState, useEffect, useContext } from 'react';
 import api from '../utils/api';
 import AuthContext from '../context/AuthContext';
 import { useToastStore } from '../components/Toast';
-import { FaPlus, FaTrash, FaEdit, FaChevronRight, FaThLarge } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaEdit, FaChevronRight, FaThLarge, FaThumbtack, FaGripVertical } from 'react-icons/fa';
 import AdminSidebar from '../components/admin/AdminSidebar';
 import AdminHeader from '../components/admin/AdminHeader';
 import StatCards from '../components/admin/StatCards';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');
@@ -67,6 +67,31 @@ const AdminDashboard = () => {
     };
 
     // Project Handlers
+    const handleProjectPin = async (id) => {
+        try {
+            await api.patch(`/projects/${id}/pin`);
+            fetchData();
+            addToast('Pin status updated', 'success');
+        } catch (error) {
+            addToast('Failed to update pin status', 'error');
+        }
+    };
+
+    const handleProjectReorder = async (newOrder) => {
+        setProjects(newOrder); // Optimistic UI update
+        try {
+            const projectOrder = newOrder.map((p, index) => ({
+                id: p._id,
+                order: index
+            }));
+            await api.put('/projects/reorder', { projectOrder });
+            addToast('Project order saved', 'success');
+        } catch (error) {
+            addToast('Failed to save order', 'error');
+            fetchData(); // Rollback
+        }
+    };
+
     const handleProjectEdit = (project) => {
         setEditingProject(project._id);
         setProjectForm({
@@ -331,35 +356,65 @@ const AdminDashboard = () => {
                                         </div>
                                     )}
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <Reorder.Group 
+                                        axis="y" 
+                                        values={projects} 
+                                        onReorder={handleProjectReorder}
+                                        className="space-y-4"
+                                    >
                                         {projects.map(project => (
-                                            <div key={project._id} className="bg-white dark:bg-surface-dark p-1 rounded-3xl border border-gray-100 dark:border-neutral-800 shadow-sm hover:shadow-xl transition-all group">
-                                                <div className="relative aspect-video rounded-2xl bg-gray-100 dark:bg-neutral-900 mb-4 overflow-hidden">
-                                                    {project.images && project.images[0] ? (
-                                                        <img src={project.images[0]} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                                    ) : (
-                                                        <div className="flex items-center justify-center h-full text-gray-400">
-                                                            <FaThLarge size={40} />
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                <div className="px-5 pb-5 flex flex-col justify-between min-h-[140px]">
-                                                    <div>
-                                                        <h3 className="font-bold text-lg text-gray-900 dark:text-white group-hover:text-primary transition-colors">{project.title}</h3>
+                                            <Reorder.Item 
+                                                key={project._id} 
+                                                value={project}
+                                                className="bg-white dark:bg-surface-dark p-4 rounded-3xl border border-gray-100 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all flex items-center justify-between group"
+                                            >
+                                                <div className="flex items-center space-x-4 flex-grow">
+                                                    <div className="cursor-grab active:cursor-grabbing text-gray-300 dark:text-neutral-700 hover:text-gray-400">
+                                                        <FaGripVertical size={18} />
+                                                    </div>
+                                                    
+                                                    <div className="relative h-16 w-24 rounded-2xl bg-gray-100 dark:bg-neutral-900 overflow-hidden flex-shrink-0">
+                                                        {project.images && project.images[0] ? (
+                                                            <img src={project.images[0]} alt={project.title} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <div className="flex items-center justify-center h-full text-gray-400">
+                                                                <FaThLarge size={24} />
+                                                            </div>
+                                                        )}
+                                                        {project.isPinned && (
+                                                            <div className="absolute top-1 right-1 bg-primary text-white p-1 rounded-full shadow-lg">
+                                                                <FaThumbtack size={10} />
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="flex-grow min-w-0">
+                                                        <h3 className="font-bold text-gray-900 dark:text-white truncate">
+                                                            {project.title}
+                                                            {project.isPinned && <span className="ml-2 text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full uppercase tracking-widest font-black">Pinned</span>}
+                                                        </h3>
                                                         <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">{project.shortDescription}</p>
                                                     </div>
-                                                    <div className="flex justify-end items-center pt-4 space-x-2 border-t border-gray-50 dark:border-neutral-800">
-                                                        <button onClick={() => handleProjectEdit(project)} className="p-2 bg-blue-50 dark:bg-blue-500/10 text-blue-500 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors">
-                                                            <FaEdit size={16} />
-                                                        </button>
-                                                        <button onClick={() => handleDelete(project._id, 'projects')} className="p-2 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-lg hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors">
-                                                            <FaTrash size={16} />
-                                                        </button>
-                                                    </div>
                                                 </div>
-                                            </div>
+
+                                                <div className="flex items-center space-x-3 ml-4">
+                                                    <button 
+                                                        onClick={() => handleProjectPin(project._id)} 
+                                                        title={project.isPinned ? "Unpin Project" : "Pin to Top"}
+                                                        className={`p-2 rounded-xl transition-all ${project.isPinned ? 'bg-primary text-white shadow-lg shadow-primary/20' : 'bg-gray-100 dark:bg-neutral-900 text-gray-400 hover:text-primary hover:bg-primary/10'}`}
+                                                    >
+                                                        <FaThumbtack size={14} />
+                                                    </button>
+                                                    <button onClick={() => handleProjectEdit(project)} className="p-2 bg-blue-50 dark:bg-blue-500/10 text-blue-500 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors">
+                                                        <FaEdit size={16} />
+                                                    </button>
+                                                    <button onClick={() => handleDelete(project._id, 'projects')} className="p-2 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-xl hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors">
+                                                        <FaTrash size={16} />
+                                                    </button>
+                                                </div>
+                                            </Reorder.Item>
                                         ))}
-                                    </div>
+                                    </Reorder.Group>
                                 </div>
                             )}
 

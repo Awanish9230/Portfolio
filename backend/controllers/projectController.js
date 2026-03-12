@@ -98,6 +98,21 @@ const updateProject = async (req, res) => {
 // @desc    Delete a project
 // @route   DELETE /api/projects/:id
 // @access  Private/Admin
+const deleteProject = async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.id);
+
+        if (project) {
+            await project.deleteOne();
+            res.json({ message: 'Project removed' });
+        } else {
+            res.status(404).json({ message: 'Project not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // @desc    Reorder projects
 // @route   PUT /api/projects/reorder
 // @access  Private/Admin
