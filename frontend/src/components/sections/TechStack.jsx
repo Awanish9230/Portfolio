@@ -17,7 +17,7 @@ const TechStack = () => {
     ];
 
     return (
-        <section id="skills" className="py-20 bg-surface">
+        <section id="skills" className="py-20 bg-surface-light dark:bg-surface-dark transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -26,9 +26,9 @@ const TechStack = () => {
                     transition={{ duration: 0.5 }}
                 >
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Technologies & Skills</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Technologies & Skills</h2>
                         <div className="w-20 h-1 bg-primary mx-auto rounded-full"></div>
-                        <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+                        <p className="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                             My technical toolkit includes a range of modern technologies for building robust full-stack applications.
                         </p>
                     </div>
@@ -38,10 +38,10 @@ const TechStack = () => {
                             <motion.div
                                 key={tech.name}
                                 whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)" }}
-                                className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center transition-all duration-300"
+                                className="bg-white dark:bg-background-dark p-6 rounded-xl shadow-sm border border-gray-100 dark:border-neutral-800 flex flex-col items-center justify-center transition-all duration-300 hover:border-primary/50 dark:hover:border-primary/50"
                             >
                                 <tech.icon className={`text-5xl ${tech.color} mb-4`} />
-                                <h4 className="text-lg font-medium text-gray-700">{tech.name}</h4>
+                                <h4 className="text-lg font-medium text-gray-700 dark:text-gray-300">{tech.name}</h4>
                             </motion.div>
                         ))}
                     </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMenu, HiX } from 'react-icons/hi';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +11,6 @@ const Navbar = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            // Keep state updates minimal to avoid re-renders
             if (window.scrollY > 20) {
                 setScrolled(true);
             } else {
@@ -34,17 +34,15 @@ const Navbar = () => {
     const handleScrollToSection = (id) => {
         setIsOpen(false);
         if (location.pathname !== '/') {
-            // If not on home page, use Link to go there
             return;
         }
 
-        const element = document.getElementById(id); // Changed to getElementById for robust # selection
+        const element = document.getElementById(id);
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
-    // Handle scroll on load if there's a hash in the URL
     useEffect(() => {
         if (location.pathname === '/' && location.hash) {
             setTimeout(() => {
@@ -58,9 +56,11 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 w-full transition-all duration-300 ${scrolled || isOpen ? 'bg-white shadow-md' : 'bg-transparent'
+            className={`fixed top-0 left-0 right-0 w-full transition-all duration-300 ${scrolled || isOpen 
+                ? 'bg-white/80 dark:bg-background-dark/80 backdrop-blur-md shadow-md' 
+                : 'bg-transparent'
                 }`}
-            style={{ zIndex: 2147483647 }} // Maximum safe integer for z-index
+            style={{ zIndex: 2147483647 }}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16 relative" style={{ zIndex: 2147483648 }}>
@@ -81,13 +81,13 @@ const Navbar = () => {
                     </Link>
 
                     {/* Desktop Menu */}
-                    <div className="hidden xl:flex space-x-8 relative" style={{ zIndex: 2147483649 }}>
+                    <div className="hidden xl:flex items-center space-x-8 relative" style={{ zIndex: 2147483649 }}>
                         {navLinks.map((link) => (
                             location.pathname === '/' && link.to.startsWith('/#') ? (
                                 <button
                                     key={link.name}
                                     onClick={() => handleScrollToSection(link.to.substring(2))}
-                                    className="text-gray-600 hover:text-primary transition-colors font-medium"
+                                    className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors font-medium"
                                 >
                                     {link.name}
                                 </button>
@@ -95,19 +95,21 @@ const Navbar = () => {
                                 <Link
                                     key={link.name}
                                     to={link.to}
-                                    className="text-gray-600 hover:text-primary transition-colors font-medium"
+                                    className="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors font-medium"
                                 >
                                     {link.name}
                                 </Link>
                             )
                         ))}
+                        <ThemeToggle />
                     </div>
 
                     {/* Mobile Menu Button - Ultra High Visibility */}
-                    <div className="xl:hidden relative flex items-center z-50 mr-2" style={{ zIndex: 2147483650 }}>
+                    <div className="xl:hidden relative flex items-center space-x-4 z-50 mr-2" style={{ zIndex: 2147483650 }}>
+                        <ThemeToggle />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="p-2 rounded-md focus:outline-none cursor-pointer text-black bg-white shadow-lg border border-gray-200 hover:bg-gray-50 flex items-center justify-center transform hover:scale-105 transition-transform"
+                            className="p-2 rounded-md focus:outline-none cursor-pointer text-gray-900 dark:text-gray-100 bg-white dark:bg-neutral-800 shadow-lg border border-gray-200 dark:border-neutral-700 hover:bg-gray-50 dark:hover:bg-neutral-700 flex items-center justify-center transform hover:scale-105 transition-transform"
                             aria-label="Toggle menu"
                         >
                             {isOpen ? <HiX size={28} /> : <HiMenu size={28} />}
@@ -123,16 +125,16 @@ const Navbar = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="xl:hidden bg-white border-t border-gray-100 shadow-2xl absolute w-full left-0 top-16 overflow-hidden"
+                        className="xl:hidden bg-white dark:bg-background-dark border-t border-gray-100 dark:border-neutral-800 shadow-2xl absolute w-full left-0 top-16 overflow-hidden"
                         style={{ zIndex: 2147483646 }}
                     >
-                        <div className="px-4 py-4 space-y-3 bg-white relative z-50">
+                        <div className="px-4 py-4 space-y-3 relative z-50">
                             {navLinks.map((link) => (
                                 location.pathname === '/' && link.to.startsWith('/#') ? (
                                     <button
                                         key={link.name}
                                         onClick={() => handleScrollToSection(link.to.substring(2))}
-                                        className="block w-full text-left px-4 py-3 text-base font-bold text-gray-800 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-100"
+                                        className="block w-full text-left px-4 py-3 text-base font-bold text-gray-800 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-neutral-800 rounded-lg transition-colors border border-transparent hover:border-gray-100 dark:hover:border-neutral-700"
                                     >
                                         {link.name}
                                     </button>
@@ -141,7 +143,7 @@ const Navbar = () => {
                                         key={link.name}
                                         to={link.to}
                                         onClick={() => setIsOpen(false)}
-                                        className="block w-full text-left px-4 py-3 text-base font-bold text-gray-800 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-gray-100"
+                                        className="block w-full text-left px-4 py-3 text-base font-bold text-gray-800 dark:text-gray-200 hover:text-primary hover:bg-gray-50 dark:hover:bg-slate-800 rounded-lg transition-colors border border-transparent hover:border-gray-100 dark:hover:border-slate-700"
                                     >
                                         {link.name}
                                     </Link>

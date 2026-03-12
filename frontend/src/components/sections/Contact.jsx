@@ -34,7 +34,7 @@ const Contact = () => {
     };
 
     return (
-        <section id="contact" className="py-20 bg-white">
+        <section id="contact" className="py-20 bg-white dark:bg-background-dark transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -43,23 +43,23 @@ const Contact = () => {
                     transition={{ duration: 0.5 }}
                 >
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Get In Touch</h2>
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Get In Touch</h2>
                         <div className="w-20 h-1 bg-primary mx-auto rounded-full"></div>
-                        <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+                        <p className="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                             Have a project in mind or just want to say hi? Feel free to send me a message!
                         </p>
                     </div>
 
-                    <div className="max-w-3xl mx-auto bg-surface rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+                    <div className="max-w-3xl mx-auto bg-surface-light dark:bg-surface-dark rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-neutral-800">
                         <div className="p-8 md:p-12">
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div>
-                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                         Your Name
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <FaUser className="text-gray-400" />
+                                            <FaUser className="text-gray-400 dark:text-gray-500" />
                                         </div>
                                         <input
                                             type="text"
@@ -68,19 +68,19 @@ const Contact = () => {
                                             value={formData.name}
                                             onChange={handleChange}
                                             required
-                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary text-gray-900 placeholder-gray-400 transition-colors"
-                                            placeholder="John Doe"
+                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-neutral-700 rounded-lg focus:ring-primary focus:border-primary bg-white dark:bg-neutral-900 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
+                                            placeholder="Name"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                         Email Address
                                     </label>
                                     <div className="relative">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <FaEnvelope className="text-gray-400" />
+                                            <FaEnvelope className="text-gray-400 dark:text-gray-500" />
                                         </div>
                                         <input
                                             type="email"
@@ -89,14 +89,14 @@ const Contact = () => {
                                             value={formData.email}
                                             onChange={handleChange}
                                             required
-                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary text-gray-900 placeholder-gray-400 transition-colors"
-                                            placeholder="john@example.com"
+                                            className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-neutral-700 rounded-lg focus:ring-primary focus:border-primary bg-white dark:bg-neutral-900 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
+                                            placeholder="you@example.com"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                                         Message
                                     </label>
                                     <textarea
@@ -106,7 +106,7 @@ const Contact = () => {
                                         value={formData.message}
                                         onChange={handleChange}
                                         required
-                                        className="block w-full p-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary text-gray-900 placeholder-gray-400 transition-colors"
+                                        className="block w-full p-3 border border-gray-300 dark:border-neutral-700 rounded-lg focus:ring-primary focus:border-primary bg-white dark:bg-neutral-900 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 transition-colors"
                                         placeholder="Tell me about your project..."
                                     ></textarea>
                                 </div>

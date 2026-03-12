@@ -45,20 +45,19 @@ const ProjectDetails = () => {
     }
 
     return (
-        <div className="min-h-screen bg-surface pt-24 pb-20">
+        <div className="min-h-screen bg-surface-light dark:bg-surface-dark pt-24 pb-20 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <Link to="/" className="inline-flex items-center text-gray-600 hover:text-primary transition-colors mb-8">
+                <Link to="/" className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-indigo-400 transition-colors mb-8">
                     <FaArrowLeft className="mr-2" /> Back to Projects
                 </Link>
 
-                <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+                <div className="bg-white dark:bg-background-dark rounded-2xl shadow-sm overflow-hidden border border-gray-100 dark:border-neutral-800 transition-colors">
                     {/* Media Gallery */}
-                    <div className="p-6 md:p-8 border-b border-gray-100">
-                        <div className="mb-6 aspect-video bg-gray-100 rounded-xl overflow-hidden shadow-inner">
-                            {/* Check if video exists and is selected (logic can be improved for mixed media) */}
+                    <div className="p-6 md:p-8 border-b border-gray-100 dark:border-neutral-800">
+                        <div className="mb-6 aspect-video bg-gray-100 dark:bg-neutral-900 rounded-xl overflow-hidden shadow-inner">
                             {project.video && activeImage === project.images.length ? (
                                 <iframe
-                                    src={project.video.replace('watch?v=', 'embed/')} // Simple youtube embed logic
+                                    src={project.video.replace('watch?v=', 'embed/')}
                                     title={project.title}
                                     className="w-full h-full"
                                     frameBorder="0"
@@ -74,7 +73,7 @@ const ProjectDetails = () => {
                         </div>
 
                         {/* Thumbnails */}
-                        <div className="flex gap-4 overflow-x-auto pb-2">
+                        <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin">
                             {project.images.map((img, index) => (
                                 <button
                                     key={index}
@@ -92,10 +91,10 @@ const ProjectDetails = () => {
                             {project.video && (
                                 <button
                                     onClick={() => setActiveImage(project.images.length)}
-                                    className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 flex items-center justify-center bg-gray-100 ${activeImage === project.images.length ? 'border-primary ring-2 ring-primary/20' : 'border-transparent opacity-70 hover:opacity-100'
+                                    className={`flex-shrink-0 w-24 h-24 rounded-lg overflow-hidden border-2 flex items-center justify-center bg-gray-100 dark:bg-neutral-800 ${activeImage === project.images.length ? 'border-primary ring-2 ring-primary/20' : 'border-transparent opacity-70 hover:opacity-100'
                                         }`}
                                 >
-                                    <span className="text-xs font-bold text-gray-500">VIDEO</span>
+                                    <span className="text-xs font-bold text-gray-500 dark:text-gray-400">VIDEO</span>
                                 </button>
                             )}
                         </div>
@@ -104,10 +103,10 @@ const ProjectDetails = () => {
                     <div className="p-6 md:p-8">
                         <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-8">
                             <div>
-                                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{project.title}</h1>
+                                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">{project.title}</h1>
                                 <div className="flex flex-wrap gap-2">
                                     {project.technologies.map((tech) => (
-                                        <span key={tech} className="px-3 py-1 bg-indigo-50 text-primary text-sm font-semibold rounded-full">
+                                        <span key={tech} className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-primary dark:text-indigo-400 text-sm font-semibold rounded-full">
                                             {tech}
                                         </span>
                                     ))}
@@ -130,7 +129,7 @@ const ProjectDetails = () => {
                                         href={project.githubLink}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="px-6 py-3 bg-white text-gray-800 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors flex items-center justify-center font-medium"
+                                        className="px-6 py-3 bg-white dark:bg-neutral-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-neutral-700 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors flex items-center justify-center font-medium"
                                     >
                                         <FaGithub className="mr-2" /> Source Code
                                     </a>
@@ -138,8 +137,8 @@ const ProjectDetails = () => {
                             </div>
                         </div>
 
-                        <div className="prose max-w-none text-gray-600">
-                            <h3 className="text-xl font-bold text-gray-900 mb-3 block">Description</h3>
+                        <div className="prose max-w-none text-gray-600 dark:text-gray-400">
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 block border-b border-gray-100 dark:border-neutral-800 pb-2">Description</h3>
                             <p className="whitespace-pre-line leading-relaxed">
                                 {project.fullDescription}
                             </p>

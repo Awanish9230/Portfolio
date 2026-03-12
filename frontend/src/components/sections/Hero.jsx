@@ -34,7 +34,7 @@ const Hero = () => {
         return url;
     };
     return (
-        <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-white pt-16">
+        <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-white dark:from-black dark:to-background-dark pt-16 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center">
                 <div className="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
                     <motion.div
@@ -42,16 +42,16 @@ const Hero = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <h2 className="text-xl md:text-2xl font-medium text-gray-600 mb-2">
+                        <h2 className="text-xl md:text-2xl font-medium text-gray-600 dark:text-gray-400 mb-2">
                             Hello, I'm
                         </h2>
-                        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4 tracking-tight">
+                        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
                             Awanish <span className="text-primary">Kumar</span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-gray-600 mb-8 font-light">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 font-light">
                             Full Stack MERN Developer
                         </p>
-                        <p className="text-gray-500 mb-10 max-w-lg mx-auto md:mx-0 leading-relaxed">
+                        <p className="text-gray-500 dark:text-gray-400 mb-10 max-w-lg mx-auto md:mx-0 leading-relaxed">
                             I build scalable, responsive, and modern web applications using MongoDB, Express, React, and Node.js.
                         </p>
 
@@ -68,9 +68,8 @@ const Hero = () => {
                             {profileData.resume && (
                                 <a
                                     href={getDownloadableResume(profileData.resume)}
-                                    // Removed target="_blank" since we are forcing download
                                     rel="noopener noreferrer"
-                                    className="px-8 py-3 bg-white text-primary border border-primary rounded-lg shadow-sm hover:bg-indigo-50 transition-colors cursor-pointer font-medium text-center"
+                                    className="px-8 py-3 bg-white dark:bg-neutral-800 text-primary dark:text-indigo-400 border border-primary dark:border-indigo-400 rounded-lg shadow-sm hover:bg-indigo-50 dark:hover:bg-neutral-700 transition-colors cursor-pointer font-medium text-center"
                                 >
                                     Download Resume
                                 </a>
@@ -82,7 +81,7 @@ const Hero = () => {
                                     smooth={true}
                                     offset={-70}
                                     duration={500}
-                                    className="px-8 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 transition-colors cursor-pointer font-medium text-center"
+                                    className="px-8 py-3 bg-white dark:bg-neutral-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-neutral-700 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-neutral-700 transition-colors cursor-pointer font-medium text-center"
                                 >
                                     Contact Me
                                 </Link>
@@ -92,7 +91,7 @@ const Hero = () => {
                                         href="https://www.linkedin.com/in/awanish-kumar-verma-33740b295/"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-500 hover:text-blue-600 transition-colors"
+                                        className="text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                                     >
                                         <FaLinkedin size={32} />
                                     </a>
@@ -100,7 +99,7 @@ const Hero = () => {
                                         href="https://github.com/Awanish9230"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-gray-500 hover:text-gray-900 transition-colors"
+                                        className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
                                     >
                                         <FaGithub size={32} />
                                     </a>
@@ -118,7 +117,7 @@ const Hero = () => {
                         className="relative z-10"
                     >
                         {/* Profile Image */}
-                        <div className="w-64 h-64 md:w-96 md:h-96 bg-indigo-100 rounded-3xl flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white">
+                        <div className="w-64 h-64 md:w-96 md:h-96 bg-indigo-100 dark:bg-neutral-800 rounded-3xl flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white dark:border-neutral-700">
                             <img
                                 src={getOptimizedImage(profileData.profileImage)}
                                 alt="Awanish Kumar Profile"
@@ -127,8 +126,8 @@ const Hero = () => {
                         </div>
 
                         {/* Decorative Elements */}
-                        <div className="absolute -top-10 -right-10 w-20 h-20 bg-yellow-200 rounded-full opacity-50 blur-xl animate-pulse"></div>
-                        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-primary rounded-full opacity-20 blur-2xl animate-pulse"></div>
+                        <div className="absolute -top-10 -right-10 w-20 h-20 bg-yellow-200 dark:bg-yellow-900/40 rounded-full opacity-50 blur-xl animate-pulse"></div>
+                        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-primary rounded-full opacity-20 dark:opacity-40 blur-2xl animate-pulse"></div>
                     </motion.div>
                 </div>
             </div>

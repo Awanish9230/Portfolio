@@ -4,7 +4,11 @@
 
 @layer base {
   body {
-    @apply bg-background text-gray-900 font-sans antialiased;
+    @apply bg-background-light text-text-light font-sans antialiased transition-colors duration-300;
+  }
+  
+  .dark body {
+    @apply bg-background-dark text-text-dark;
   }
 }
 
@@ -14,14 +18,21 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+  @apply bg-neutral-300 rounded-full;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-neutral-700;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  @apply bg-neutral-400;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-600;
 }
