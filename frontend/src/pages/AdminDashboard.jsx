@@ -45,21 +45,21 @@ const AdminDashboard = () => {
 
     const fetchData = async () => {
         try {
-            if (activeTab === 'overview' || activeTab === 'projects') {
-                const { data } = await api.get('/projects');
-                setProjects(data);
-                setCounts(prev => ({ ...prev, projects: data.length }));
-            }
-            if (activeTab === 'overview' || activeTab === 'experience') {
-                const { data } = await api.get('/experience');
-                setExperiences(data);
-                setCounts(prev => ({ ...prev, experience: data.length }));
-            }
-            if (activeTab === 'overview' || activeTab === 'messages') {
-                const { data } = await api.get('/messages');
-                setMessages(data);
-                setCounts(prev => ({ ...prev, messages: data.length }));
-            }
+            const [projectsRes, expRes, msgRes, statsRes] = await Promise.all([
+                api.get('/projects'),
+                api.get('/experience'),
+                api.get('/messages'),
+                api.get('/stats')
+            ]);
+            setProjects(projectsRes.data);
+            setExperiences(expRes.data);
+            setMessages(msgRes.data);
+            setCounts({
+                projects: projectsRes.data.length,
+                experience: expRes.data.length,
+                messages: msgRes.data.filter(m => !m.isRead).length,
+                views: statsRes.data.totalViews || 0
+            });
         } catch (error) {
             console.error(error);
             addToast('Failed to fetch data', 'error');

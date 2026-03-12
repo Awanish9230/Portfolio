@@ -6,7 +6,7 @@ const StatCards = ({ counts }) => {
         { label: 'Total Projects', value: counts.projects, icon: FaFileCode, color: 'text-blue-500', bg: 'bg-blue-500/10' },
         { label: 'Experience Items', value: counts.experience, icon: FaHistory, color: 'text-purple-500', bg: 'bg-purple-500/10' },
         { label: 'Unread Messages', value: counts.messages, icon: FaCommentDots, color: 'text-green-500', bg: 'bg-green-500/10' },
-        { label: 'Site Views', value: '1.2k', icon: FaEye, color: 'text-orange-500', bg: 'bg-orange-500/10' },
+        { label: 'Site Views', value: counts.views || 0, icon: FaEye, color: 'text-orange-500', bg: 'bg-orange-500/10' },
     ];
 
     return (
@@ -23,7 +23,6 @@ const StatCards = ({ counts }) => {
                         <div className={`p-3 rounded-xl ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}>
                             <stat.icon size={20} />
                         </div>
-                        <span className="text-[10px] font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded-full">+12%</span>
                     </div>
                     <div>
                         <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{stat.label}</p>
