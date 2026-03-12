@@ -230,7 +230,14 @@ const AdminDashboard = () => {
                                             </div>
                                             <div className="space-y-4">
                                                 {projects.slice(0, 3).map(p => (
-                                                    <div key={p._id} className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-neutral-800/50 transition-colors cursor-pointer group">
+                                                    <div 
+                                                        key={p._id} 
+                                                        onClick={() => {
+                                                            setActiveTab('projects');
+                                                            handleProjectEdit(p);
+                                                        }}
+                                                        className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-neutral-800/50 transition-colors cursor-pointer group"
+                                                    >
                                                         <div className="flex items-center space-x-3">
                                                             <div className="w-10 h-10 rounded-lg bg-gray-100 dark:bg-neutral-800 flex items-center justify-center text-gray-400">
                                                                 <FaThLarge />
