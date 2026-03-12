@@ -30,6 +30,14 @@ const projectSchema = mongoose.Schema({
     liveLink: {
         type: String,
     },
+    isPinned: {
+        type: Boolean,
+        default: false,
+    },
+    order: {
+        type: Number,
+        default: 0,
+    },
 }, {
     timestamps: true,
 });

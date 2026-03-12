@@ -5,7 +5,7 @@ const Project = require('../models/Project');
 // @access  Public
 const getProjects = async (req, res) => {
     try {
-        const projects = await Project.find({});
+        const projects = await Project.find({}).sort({ isPinned: -1, order: 1, createdAt: -1 });
         res.json(projects);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -98,18 +98,38 @@ const updateProject = async (req, res) => {
 // @desc    Delete a project
 // @route   DELETE /api/projects/:id
 // @access  Private/Admin
-const deleteProject = async (req, res) => {
+// @desc    Reorder projects
+// @route   PUT /api/projects/reorder
+// @access  Private/Admin
+const reorderProjects = async (req, res) => {
+    const { projectOrder } = req.body; // Array of { id, order }
+
+    try {
+        const updatePromises = projectOrder.map(({ id, order }) =>
+            Project.findByIdAndUpdate(id, { order }, { new: true })
+        );
+        await Promise.all(updatePromises);
+        res.json({ message: 'Projects reordered successfully' });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+// @desc    Toggle pin project
+// @route   PATCH /api/projects/:id/pin
+// @access  Private/Admin
+const togglePinProject = async (req, res) => {
     try {
         const project = await Project.findById(req.params.id);
-
         if (project) {
-            await project.deleteOne();
-            res.json({ message: 'Project removed' });
+            project.isPinned = !project.isPinned;
+            const updatedProject = await project.save();
+            res.json(updatedProject);
         } else {
             res.status(404).json({ message: 'Project not found' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
@@ -119,4 +139,6 @@ module.exports = {
     createProject,
     updateProject,
     deleteProject,
+    reorderProjects,
+    togglePinProject,
 };
