@@ -7,6 +7,7 @@ import { useToastStore } from '../components/Toast';
 const AdminLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
     const { login, user } = useContext(AuthContext);
     const navigate = useNavigate();
     const addToast = useToastStore((state) => state.addToast);
@@ -19,13 +20,16 @@ const AdminLogin = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
+        setLoading(true);
         try {
             const { data } = await api.post('/admin/login', { email, password });
             login(data);
             addToast('Login successful!', 'success');
             navigate('/admin/dashboard');
         } catch (error) {
-            addToast('Invalid email or password', 'error');
+            addToast(error.response?.data?.message || 'Invalid email or password', 'error');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -78,9 +82,18 @@ const AdminLogin = () => {
                     <div>
                         <button
                             type="submit"
-                            className="group relative w-full flex justify-center py-4 px-6 border border-transparent text-sm font-bold rounded-2xl text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary shadow-lg shadow-primary/20 transition-all active:scale-[0.98]"
+                            disabled={loading}
+                            className="group relative w-full flex justify-center py-4 px-6 border border-transparent text-sm font-bold rounded-2xl text-white bg-primary hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary shadow-lg shadow-primary/20 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
                         >
-                            Authorize Entry
+                            {loading ? (
+                                <div className="flex items-center">
+                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Authorizing...
+                                </div>
+                            ) : 'Authorize Entry'}
                         </button>
                     </div>
                 </form>

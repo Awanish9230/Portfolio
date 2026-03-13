@@ -5,7 +5,9 @@ import { FaLinkedin, FaGithub } from 'react-icons/fa';
 import api from '../../utils/api';
 
 const Hero = () => {
-    const [profileData, setProfileData] = useState({ profileImage: '/profile.png', resume: '' });
+    const [profileData, setProfileData] = useState({ profileImage: '/profile_placeholder.png', resume: '' });
+    const [imageLoading, setImageLoading] = useState(true);
+    const [imageError, setImageError] = useState(false);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -20,9 +22,10 @@ const Hero = () => {
     }, []);
 
     const getOptimizedImage = (url) => {
+        if (!url) return '/profile_placeholder.png';
         if (url && url.includes('cloudinary.com')) {
-            // Apply Cloudinary transformations: Face crop, 600x600 size, auto format & quality
-            return url.replace('/upload/', '/upload/c_fill,g_face,w_600,h_600,q_auto,f_auto/');
+            // Apply Cloudinary transformations: Face crop, 800x800 size, auto format & quality
+            return url.replace('/upload/', '/upload/c_fill,g_face,w_800,h_800,q_auto,f_auto/');
         }
         return url;
     };
@@ -117,11 +120,21 @@ const Hero = () => {
                         className="relative z-10"
                     >
                         {/* Profile Image */}
-                        <div className="w-64 h-64 md:w-96 md:h-96 bg-indigo-100 dark:bg-neutral-800 rounded-3xl flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white dark:border-neutral-700">
+                        <div className="w-64 h-64 md:w-96 md:h-96 bg-indigo-100 dark:bg-neutral-800 rounded-3xl flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white dark:border-neutral-700 relative">
+                            {imageLoading && (
+                                <div className="absolute inset-0 flex items-center justify-center bg-indigo-50 dark:bg-neutral-900 animate-pulse">
+                                    <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                                </div>
+                            )}
                             <img
-                                src={getOptimizedImage(profileData.profileImage)}
+                                src={imageError ? '/profile_placeholder.png' : getOptimizedImage(profileData.profileImage)}
                                 alt="Awanish Kumar Profile"
-                                className="w-full h-full object-cover object-top"
+                                className={`w-full h-full object-cover object-top transition-opacity duration-500 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
+                                onLoad={() => setImageLoading(false)}
+                                onError={() => {
+                                    setImageError(true);
+                                    setImageLoading(false);
+                                }}
                             />
                         </div>
 

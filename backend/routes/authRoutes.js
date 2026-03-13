@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { authUser, updateUserProfile, getPublicProfile } = require('../controllers/authController');
+const { authUser, logoutUser, getMe, updateUserProfile, getPublicProfile } = require('../controllers/authController');
 const { protect, admin } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 
 router.post('/login', authUser);
+router.post('/logout', logoutUser);
 router.get('/public-profile', getPublicProfile);
+router.get('/verify', protect, getMe);
 router.route('/profile').put(
     protect,
     admin,

@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import api from '../utils/api';
 
 const AuthContext = createContext();
 
@@ -8,21 +8,30 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-        if (userInfo) {
-            setUser(userInfo);
-        }
-        setLoading(false);
+        const verifyUser = async () => {
+            try {
+                const { data } = await api.get('/admin/verify');
+                setUser(data);
+            } catch (error) {
+                setUser(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+        verifyUser();
     }, []);
 
     const login = (userData) => {
-        localStorage.setItem('userInfo', JSON.stringify(userData));
         setUser(userData);
     };
 
-    const logout = () => {
-        localStorage.removeItem('userInfo');
-        setUser(null);
+    const logout = async () => {
+        try {
+            await api.post('/admin/logout');
+            setUser(null);
+        } catch (error) {
+            console.error('Logout failed', error);
+        }
     };
 
     return (

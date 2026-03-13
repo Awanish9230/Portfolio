@@ -1,7 +1,10 @@
-import { FaThLarge, FaBriefcase, FaEnvelope, FaCog, FaChartLine, FaTimes } from 'react-icons/fa';
+import { FaThLarge, FaBriefcase, FaEnvelope, FaCog, FaChartLine, FaTimes, FaSignOutAlt } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useContext } from 'react';
+import AuthContext from '../../context/AuthContext';
 
 const AdminSidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
+    const { user, logout } = useContext(AuthContext);
     const menuItems = [
         { id: 'overview', label: 'Overview', icon: FaChartLine },
         { id: 'projects', label: 'Projects', icon: FaThLarge },
@@ -56,11 +59,18 @@ const AdminSidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
                 </nav>
             </div>
             
-            <div className="absolute bottom-6 left-0 w-full px-6">
+            <div className="absolute bottom-6 left-0 w-full px-6 space-y-4">
                 <div className="p-4 bg-gray-50 dark:bg-neutral-900 rounded-xl border border-gray-100 dark:border-neutral-800">
-                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider mb-2">Logged in as</p>
-                    <p className="text-sm font-bold text-gray-900 dark:text-white truncate">Admin User</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider mb-1">Logged in as</p>
+                    <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{user?.email || 'Admin User'}</p>
                 </div>
+                <button 
+                    onClick={logout}
+                    className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl border border-red-100 dark:border-red-900/30 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all font-bold group"
+                >
+                    <FaSignOutAlt className="group-hover:-translate-x-1 transition-transform" />
+                    <span>Logout</span>
+                </button>
             </div>
         </aside>
         </>

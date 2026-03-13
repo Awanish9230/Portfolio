@@ -16,15 +16,46 @@ const authUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
+        const token = generateToken(user._id);
+
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== 'development',
+            sameSite: 'strict',
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        });
+
         res.json({
             _id: user._id,
             email: user.email,
             isAdmin: user.isAdmin,
-            token: generateToken(user._id),
         });
     } else {
         res.status(401).json({ message: 'Invalid email or password' });
     }
+};
+
+// @desc    Logout user / clear cookie
+// @route   POST /api/admin/logout
+// @access  Public
+const logoutUser = (req, res) => {
+    res.cookie('jwt', '', {
+        httpOnly: true,
+        expires: new Date(0),
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
+};
+
+// @desc    Get user profile (current logged in user)
+// @route   GET /api/admin/verify
+// @access  Private
+const getMe = async (req, res) => {
+    const user = {
+        _id: req.user._id,
+        email: req.user.email,
+        isAdmin: req.user.isAdmin,
+    };
+    res.status(200).json(user);
 };
 
 // @desc    Update user profile (admin)
@@ -72,7 +103,7 @@ const getPublicProfile = async (req, res) => {
 
     if (admin) {
         res.json({
-            profileImage: admin.profileImage || '/profile.png',
+            profileImage: admin.profileImage || '/profile_placeholder.png',
             resume: admin.resume || ''
         });
     } else {
@@ -80,5 +111,5 @@ const getPublicProfile = async (req, res) => {
     }
 };
 
-module.exports = { authUser, updateUserProfile, getPublicProfile };
+module.exports = { authUser, logoutUser, getMe, updateUserProfile, getPublicProfile };
 
