@@ -4,6 +4,26 @@ import { Link } from 'react-router-dom';
 import api from '../../utils/api';
 import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 
+const ProjectSkeleton = () => (
+    <div className="bg-white dark:bg-background-dark rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-neutral-800 h-full flex flex-col">
+        <div className="h-48 bg-gray-200 dark:bg-neutral-800 animate-pulse"></div>
+        <div className="p-6 flex flex-col flex-grow">
+            <div className="h-6 bg-gray-200 dark:bg-neutral-800 rounded w-3/4 mb-4 animate-pulse"></div>
+            <div className="space-y-2 mb-4 flex-grow">
+                <div className="h-4 bg-gray-200 dark:bg-neutral-800 rounded w-full animate-pulse"></div>
+                <div className="h-4 bg-gray-200 dark:bg-neutral-800 rounded w-full animate-pulse"></div>
+                <div className="h-4 bg-gray-200 dark:bg-neutral-800 rounded w-5/6 animate-pulse"></div>
+            </div>
+            <div className="flex gap-2 mb-4">
+                <div className="h-6 w-16 bg-indigo-50 dark:bg-indigo-900/30 rounded-md animate-pulse"></div>
+                <div className="h-6 w-16 bg-indigo-50 dark:bg-indigo-900/30 rounded-md animate-pulse"></div>
+                <div className="h-6 w-16 bg-indigo-50 dark:bg-indigo-900/30 rounded-md animate-pulse"></div>
+            </div>
+            <div className="h-10 border border-gray-200 dark:border-neutral-700 rounded-lg w-full animate-pulse"></div>
+        </div>
+    </div>
+);
+
 const Projects = () => {
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -38,8 +58,10 @@ const Projects = () => {
                     </div>
 
                     {loading ? (
-                        <div className="flex justify-center">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {[1, 2, 3].map((n) => (
+                                <ProjectSkeleton key={n} />
+                            ))}
                         </div>
                     ) : projects.length === 0 ? (
                         <div className="text-center text-gray-500 dark:text-gray-400">

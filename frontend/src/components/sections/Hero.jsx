@@ -32,7 +32,11 @@ const Hero = () => {
 
     const getDownloadableResume = (url) => {
         if (url && url.includes('cloudinary.com')) {
-            return url.replace('/upload/', '/upload/fl_attachment/');
+            // Force PDF format and add attachment flag
+            let transformedUrl = url.replace('/upload/', '/upload/fl_attachment,f_pdf/');
+            // Ensure the extension is .pdf
+            transformedUrl = transformedUrl.replace(/\.[^/.]+$/, '.pdf');
+            return transformedUrl;
         }
         return url;
     };
@@ -119,12 +123,10 @@ const Hero = () => {
                         transition={{ duration: 0.5, delay: 0.2 }}
                         className="relative z-10"
                     >
-                        {/* Profile Image */}
+                        {/* Profile Image Skeleton/Container */}
                         <div className="w-64 h-64 md:w-96 md:h-96 bg-indigo-100 dark:bg-neutral-800 rounded-3xl flex items-center justify-center overflow-hidden shadow-2xl border-4 border-white dark:border-neutral-700 relative">
                             {imageLoading && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-indigo-50 dark:bg-neutral-900 animate-pulse">
-                                    <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-                                </div>
+                                <div className="absolute inset-0 bg-gray-200 dark:bg-neutral-700 animate-pulse rounded-3xl"></div>
                             )}
                             <img
                                 src={imageError ? '/profile_placeholder.png' : getOptimizedImage(profileData.profileImage)}

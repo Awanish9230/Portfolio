@@ -3,6 +3,33 @@ import { motion } from 'framer-motion';
 import api from '../../utils/api';
 import { FaBriefcase, FaGraduationCap } from 'react-icons/fa';
 
+const ExperienceSkeleton = ({ index }) => (
+    <div className="relative pl-8 md:pl-0 w-full mb-8 md:mb-12">
+        {/* Timeline Line (Desktop) */}
+        <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-neutral-800 -translate-x-1/2"></div>
+
+        <div className={`md:flex items-center justify-between ${index % 2 === 0 ? 'md:flex-row-reverse' : ''} group`}>
+            <div className="hidden md:block w-5/12"></div>
+
+            {/* Icon Skeleton */}
+            <div className="absolute left-0 md:left-1/2 top-4 md:top-0 w-6 h-6 md:w-10 md:h-10 bg-gray-300 dark:bg-neutral-700 rounded-full flex items-center justify-center shadow-lg z-10 -translate-x-1/2 md:-translate-x-1/2 animate-pulse"></div>
+
+            {/* Card Content Skeleton */}
+            <div className="md:w-5/12 bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-gray-100 dark:border-neutral-800 shadow-sm transition-all duration-300">
+                <div className="inline-block w-20 h-6 bg-gray-200 dark:bg-neutral-800 rounded-full mb-3 animate-pulse"></div>
+                <div className="h-6 bg-gray-200 dark:bg-neutral-800 rounded w-3/4 mb-2 animate-pulse"></div>
+                <div className="h-5 bg-gray-200 dark:bg-neutral-800 rounded w-1/2 mb-4 animate-pulse"></div>
+                
+                <div className="space-y-2">
+                    <div className="h-4 bg-gray-200 dark:bg-neutral-800 rounded w-full animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-neutral-800 rounded w-full animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-neutral-800 rounded w-4/5 animate-pulse"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
 const Experience = () => {
     const [experiences, setExperiences] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -47,8 +74,10 @@ const Experience = () => {
                     </div>
 
                     {loading ? (
-                        <div className="flex justify-center">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                        <div className="grid grid-cols-1 max-w-4xl mx-auto w-full">
+                            {[0, 1].map((n) => (
+                                <ExperienceSkeleton key={n} index={n} />
+                            ))}
                         </div>
                     ) : experiences.length === 0 ? (
                         <div className="text-center text-gray-500 dark:text-gray-400">
