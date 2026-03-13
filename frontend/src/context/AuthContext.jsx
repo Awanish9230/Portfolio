@@ -23,12 +23,16 @@ export const AuthProvider = ({ children }) => {
 
     const login = (userData) => {
         setUser(userData);
+        if (userData.token) {
+            localStorage.setItem('token', userData.token);
+        }
     };
 
     const logout = async () => {
         try {
             await api.post('/admin/logout');
             setUser(null);
+            localStorage.removeItem('token');
         } catch (error) {
             console.error('Logout failed', error);
         }
