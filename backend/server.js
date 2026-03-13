@@ -14,7 +14,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://awanish-6g8o.onrender.com'],
+    origin: ['http://localhost:5173', 'https://awanish-6g8o.onrender.com', 'https://portfolio-l6uz.onrender.com'],
     credentials: true
 }));
 
