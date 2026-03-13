@@ -21,7 +21,7 @@ const authUser = async (req, res) => {
         res.cookie('jwt', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV !== 'development',
-            sameSite: 'strict',
+            sameSite: 'lax',
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
         });
 
@@ -81,13 +81,21 @@ const updateUserProfile = async (req, res) => {
 
         const updatedUser = await user.save();
 
+        const token = generateToken(updatedUser._id);
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== 'development',
+            sameSite: 'lax',
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        });
+
         res.json({
             _id: updatedUser._id,
             email: updatedUser.email,
             isAdmin: updatedUser.isAdmin,
             profileImage: updatedUser.profileImage,
             resume: updatedUser.resume,
-            token: generateToken(updatedUser._id),
+            token: token,
         });
     } else {
         res.status(404).json({ message: 'User not found' });
