@@ -1,4 +1,4 @@
-import { FaThLarge, FaBriefcase, FaEnvelope, FaCog, FaChartLine, FaTimes, FaSignOutAlt } from 'react-icons/fa';
+import { FaThLarge, FaBriefcase, FaEnvelope, FaCog, FaChartLine, FaTimes, FaSignOutAlt, FaCertificate } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useContext } from 'react';
 import AuthContext from '../../context/AuthContext';
@@ -9,6 +9,7 @@ const AdminSidebar = ({ activeTab, setActiveTab, isOpen, setIsOpen }) => {
         { id: 'overview', label: 'Overview', icon: FaChartLine },
         { id: 'projects', label: 'Projects', icon: FaThLarge },
         { id: 'experience', label: 'Experience', icon: FaBriefcase },
+        { id: 'certifications', label: 'Certifications', icon: FaCertificate },
         { id: 'messages', label: 'Messages', icon: FaEnvelope },
         { id: 'settings', label: 'Settings', icon: FaCog },
     ];

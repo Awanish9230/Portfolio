@@ -4,6 +4,7 @@ import About from '../components/sections/About';
 import TechStack from '../components/sections/TechStack';
 import Experience from '../components/sections/Experience';
 import Projects from '../components/sections/Projects';
+import Certifications from '../components/sections/Certifications';
 import Contact from '../components/sections/Contact';
 import api from '../utils/api';
 
@@ -29,6 +30,7 @@ const Home = () => {
             <About />
             <TechStack />
             <Experience />
+            <Certifications />
             <Projects />
             <Contact />
         </div>

@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import api from '../utils/api';
 import AuthContext from '../context/AuthContext';
 import { useToastStore } from '../components/Toast';
-import { FaPlus, FaTrash, FaEdit, FaChevronRight, FaThLarge, FaThumbtack, FaGripVertical, FaCog } from 'react-icons/fa';
+import { FaPlus, FaTrash, FaEdit, FaChevronRight, FaThLarge, FaThumbtack, FaGripVertical, FaCog, FaCertificate } from 'react-icons/fa';
 import AdminSidebar from '../components/admin/AdminSidebar';
 import AdminHeader from '../components/admin/AdminHeader';
 import StatCards from '../components/admin/StatCards';
@@ -12,8 +12,9 @@ const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');
     const [projects, setProjects] = useState([]);
     const [experiences, setExperiences] = useState([]);
+    const [certifications, setCertifications] = useState([]);
     const [messages, setMessages] = useState([]);
-    const [counts, setCounts] = useState({ projects: 0, experience: 0, messages: 0 });
+    const [counts, setCounts] = useState({ projects: 0, experience: 0, certifications: 0, messages: 0 });
     const { user, login } = useContext(AuthContext);
     const addToast = useToastStore((state) => state.addToast);
 
@@ -39,6 +40,13 @@ const AdminDashboard = () => {
         title: '', organization: '', description: '', duration: '', type: 'Job'
     });
 
+    const [showCertificationForm, setShowCertificationForm] = useState(false);
+    const [editingCertification, setEditingCertification] = useState(null);
+    const [certificationForm, setCertificationForm] = useState({
+        title: '', issuingOrganization: '', issueDate: '', expirationDate: '', credentialID: '', credentialURL: '', isEmbedded: false, embedCode: '',
+        certificateImage: null, certificatePDF: null
+    });
+
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
@@ -47,18 +55,21 @@ const AdminDashboard = () => {
 
     const fetchData = async () => {
         try {
-            const [projectsRes, expRes, msgRes, statsRes] = await Promise.all([
+            const [projectsRes, expRes, certRes, msgRes, statsRes] = await Promise.all([
                 api.get('/projects'),
                 api.get('/experience'),
+                api.get('/certifications'),
                 api.get('/messages'),
                 api.get('/stats')
             ]);
             setProjects(projectsRes.data);
             setExperiences(expRes.data);
+            setCertifications(certRes.data);
             setMessages(msgRes.data);
             setCounts({
                 projects: projectsRes.data.length,
                 experience: expRes.data.length,
+                certifications: certRes.data.length,
                 messages: msgRes.data.filter(m => !m.isRead).length,
                 views: statsRes.data.totalViews || 0
             });
@@ -187,6 +198,63 @@ const AdminDashboard = () => {
             fetchData();
         } catch (error) {
             addToast(editingExperience ? 'Failed to update experience' : 'Failed to add experience', 'error');
+        }
+    };
+
+    // Certification Handlers
+    const handleCertificationEdit = (cert) => {
+        setEditingCertification(cert._id);
+        setCertificationForm({
+            title: cert.title,
+            issuingOrganization: cert.issuingOrganization,
+            issueDate: cert.issueDate || '',
+            expirationDate: cert.expirationDate || '',
+            credentialID: cert.credentialID || '',
+            credentialURL: cert.credentialURL || '',
+            isEmbedded: cert.isEmbedded || false,
+            embedCode: cert.embedCode || '',
+            certificateImage: null,
+            certificatePDF: null
+        });
+        setShowCertificationForm(true);
+    };
+
+    const resetCertificationForm = () => {
+        setCertificationForm({ title: '', issuingOrganization: '', issueDate: '', expirationDate: '', credentialID: '', credentialURL: '', isEmbedded: false, embedCode: '', certificateImage: null, certificatePDF: null });
+        setEditingCertification(null);
+        setShowCertificationForm(false);
+    };
+
+    const handleCertificationSubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        
+        Object.keys(certificationForm).forEach(key => {
+            if (key === 'certificateImage') {
+                if (certificationForm[key]) formData.append('image', certificationForm[key]);
+            } else if (key === 'certificatePDF') {
+                if (certificationForm[key]) formData.append('pdf', certificationForm[key]);
+            } else {
+                formData.append(key, certificationForm[key]);
+            }
+        });
+
+        try {
+            if (editingCertification) {
+                await api.put(`/certifications/${editingCertification}`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                addToast('Certification updated successfully', 'success');
+            } else {
+                await api.post('/certifications', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                addToast('Certification added successfully', 'success');
+            }
+            resetCertificationForm();
+            fetchData();
+        } catch (error) {
+            addToast(editingCertification ? 'Failed to update certification' : 'Failed to add certification', 'error');
         }
     };
 
@@ -513,6 +581,129 @@ const AdminDashboard = () => {
                                                         <FaEdit size={16} />
                                                     </button>
                                                     <button onClick={() => handleDelete(exp._id, 'experience')} className="p-2 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-lg hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors">
+                                                        <FaTrash size={16} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Certifications Tab */}
+                            {activeTab === 'certifications' && (
+                                <div className="space-y-6">
+                                    <div className="flex justify-between items-center">
+                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white">Honors & Certifications</h3>
+                                        <button
+                                            onClick={() => {
+                                                if (showCertificationForm) resetCertificationForm();
+                                                else setShowCertificationForm(true);
+                                            }}
+                                            className={`px-4 py-2 rounded-xl text-white font-medium flex items-center transition-all shadow-lg ${showCertificationForm ? 'bg-gray-500 shadow-gray-500/20' : 'bg-primary shadow-primary/20'}`}
+                                        >
+                                            {showCertificationForm ? 'Cancel' : <><FaPlus className="mr-2" /> Add Certification</>}
+                                        </button>
+                                    </div>
+
+                                    {showCertificationForm && (
+                                        <div className="bg-white dark:bg-surface-dark p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-neutral-800 transition-colors mb-8">
+                                            <h3 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">{editingCertification ? 'Edit Certification' : 'Add New Certification'}</h3>
+                                            <form onSubmit={handleCertificationSubmit} className="space-y-6">
+                                                <div className="flex items-center space-x-3 mb-4">
+                                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Embedding Type</label>
+                                                    <button 
+                                                        type="button"
+                                                        onClick={() => setCertificationForm({ ...certificationForm, isEmbedded: !certificationForm.isEmbedded })}
+                                                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${certificationForm.isEmbedded ? 'bg-primary' : 'bg-gray-200 dark:bg-neutral-800'}`}
+                                                    >
+                                                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${certificationForm.isEmbedded ? 'translate-x-6' : 'translate-x-1'}`} />
+                                                    </button>
+                                                    <span className="text-xs text-gray-500">{certificationForm.isEmbedded ? 'Embedded Code' : 'Manual Entry'}</span>
+                                                </div>
+
+                                                {certificationForm.isEmbedded ? (
+                                                    <div className="space-y-4">
+                                                        <input type="text" placeholder="Title (for reference)" className="w-full px-4 py-3 border border-gray-200 dark:border-neutral-700 rounded-xl bg-gray-50 dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none" required
+                                                            value={certificationForm.title} onChange={e => setCertificationForm({ ...certificationForm, title: e.target.value })} />
+                                                        <input type="text" placeholder="Issuing Organization" className="w-full px-4 py-3 border border-gray-200 dark:border-neutral-700 rounded-xl bg-gray-50 dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none" required
+                                                            value={certificationForm.issuingOrganization} onChange={e => setCertificationForm({ ...certificationForm, issuingOrganization: e.target.value })} />
+                                                        <textarea placeholder="Paste embed code here..." className="w-full px-4 py-3 border border-gray-200 dark:border-neutral-700 rounded-xl bg-gray-50 dark:bg-neutral-900 text-gray-900 dark:text-white font-mono text-sm focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none" rows="5" required
+                                                            value={certificationForm.embedCode} onChange={e => setCertificationForm({ ...certificationForm, embedCode: e.target.value })}></textarea>
+                                                    </div>
+                                                ) : (
+                                                    <div className="space-y-6">
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                            <input type="text" placeholder="Certification Title" className="w-full px-4 py-3 border border-gray-200 dark:border-neutral-700 rounded-xl bg-gray-50 dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none" required
+                                                                value={certificationForm.title} onChange={e => setCertificationForm({ ...certificationForm, title: e.target.value })} />
+                                                            <input type="text" placeholder="Issuing Organization" className="w-full px-4 py-3 border border-gray-200 dark:border-neutral-700 rounded-xl bg-gray-50 dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none" required
+                                                                value={certificationForm.issuingOrganization} onChange={e => setCertificationForm({ ...certificationForm, issuingOrganization: e.target.value })} />
+                                                        </div>
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                            <input type="text" placeholder="Issue Date" className="w-full px-4 py-3 border border-gray-200 dark:border-neutral-700 rounded-xl bg-gray-50 dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+                                                                value={certificationForm.issueDate} onChange={e => setCertificationForm({ ...certificationForm, issueDate: e.target.value })} />
+                                                            <input type="text" placeholder="Expiration Date (if any)" className="w-full px-4 py-3 border border-gray-200 dark:border-neutral-700 rounded-xl bg-gray-50 dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+                                                                value={certificationForm.expirationDate} onChange={e => setCertificationForm({ ...certificationForm, expirationDate: e.target.value })} />
+                                                        </div>
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                            <input type="text" placeholder="Credential ID" className="w-full px-4 py-3 border border-gray-200 dark:border-neutral-700 rounded-xl bg-gray-50 dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+                                                                value={certificationForm.credentialID} onChange={e => setCertificationForm({ ...certificationForm, credentialID: e.target.value })} />
+                                                            <input type="url" placeholder="Credential URL" className="w-full px-4 py-3 border border-gray-200 dark:border-neutral-700 rounded-xl bg-gray-50 dark:bg-neutral-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+                                                                value={certificationForm.credentialURL} onChange={e => setCertificationForm({ ...certificationForm, credentialURL: e.target.value })} />
+                                                        </div>
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                            <div className="space-y-1">
+                                                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Certificate Image</label>
+                                                                <input type="file" accept="image/*" className="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-all"
+                                                                    onChange={e => setCertificationForm({ ...certificationForm, certificateImage: e.target.files[0] })} />
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Certificate PDF</label>
+                                                                <input type="file" accept=".pdf" className="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-all"
+                                                                    onChange={e => setCertificationForm({ ...certificationForm, certificatePDF: e.target.files[0] })} />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                
+                                                <div className="flex space-x-3">
+                                                    <button type="submit" className="px-8 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 shadow-lg shadow-green-600/20 font-bold transition-all">
+                                                        Save Certification
+                                                    </button>
+                                                    <button type="button" onClick={resetCertificationForm} className="px-8 py-3 bg-gray-200 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-300 dark:hover:bg-neutral-700 font-bold transition-all">
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    )}
+
+                                    <div className="space-y-4">
+                                        {certifications.map(cert => (
+                                            <div key={cert._id} className="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-gray-100 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all flex justify-between items-center group">
+                                                <div className="flex items-center space-x-6">
+                                                    <div className="w-12 h-12 rounded-xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 border border-orange-100 dark:border-orange-500/20 group-hover:scale-110 transition-transform">
+                                                        <FaCertificate size={24} />
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors">{cert.title}</h3>
+                                                        <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                            <span className="font-medium text-gray-700 dark:text-gray-300">{cert.issuingOrganization}</span>
+                                                            {cert.issueDate && (
+                                                                <>
+                                                                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                                                                    <span>{cert.issueDate}</span>
+                                                                </>
+                                                            )}
+                                                            <span className="px-2 py-0.5 rounded bg-gray-100 dark:bg-neutral-800 uppercase tracking-tighter">{cert.isEmbedded ? 'Embedded' : 'Manual'}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <button onClick={() => handleCertificationEdit(cert)} className="p-2 bg-blue-50 dark:bg-blue-500/10 text-blue-500 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors">
+                                                        <FaEdit size={16} />
+                                                    </button>
+                                                    <button onClick={() => handleDelete(cert._id, 'certifications')} className="p-2 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-lg hover:bg-red-100 dark:hover:bg-red-500/20 transition-colors">
                                                         <FaTrash size={16} />
                                                     </button>
                                                 </div>
