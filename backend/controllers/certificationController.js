@@ -28,10 +28,12 @@ const createCertification = async (req, res) => {
 
         if (req.files) {
             if (req.files.image && req.files.image[0]) {
-                certificationData.certificateImage = req.files.image[0].path;
+                const img = req.files.image[0];
+                certificationData.certificateImage = img.secure_url || img.url || img.path;
             }
             if (req.files.pdf && req.files.pdf[0]) {
-                certificationData.certificatePDF = req.files.pdf[0].path;
+                const pdf = req.files.pdf[0];
+                certificationData.certificatePDF = pdf.secure_url || pdf.url || pdf.path;
             }
         }
 
@@ -59,10 +61,12 @@ const updateCertification = async (req, res) => {
 
             if (req.files) {
                 if (req.files.image && req.files.image[0]) {
-                    updateData.certificateImage = req.files.image[0].path;
+                    const img = req.files.image[0];
+                    updateData.certificateImage = img.secure_url || img.url || img.path;
                 }
                 if (req.files.pdf && req.files.pdf[0]) {
-                    updateData.certificatePDF = req.files.pdf[0].path;
+                    const pdf = req.files.pdf[0];
+                    updateData.certificatePDF = pdf.secure_url || pdf.url || pdf.path;
                 }
             }
 

@@ -7,10 +7,10 @@ const CertificationCard = ({ cert }) => (
     <div className="bg-surface-light dark:bg-surface-dark p-6 rounded-3xl border border-gray-100 dark:border-neutral-800 shadow-xl hover:shadow-2xl transition-all group overflow-hidden relative h-full">
         {cert.isEmbedded ? (
             <div className="flex flex-col h-full relative z-10">
-                <div className="flex-grow flex items-center justify-center min-h-[220px] bg-white rounded-2xl p-4 overflow-hidden shadow-inner mb-6">
+                <div className="flex-grow flex items-center justify-center min-h-[200px] bg-primary/5 rounded-2xl p-2 overflow-hidden shadow-inner mb-6">
                     <div 
                         dangerouslySetInnerHTML={{ __html: cert.embedCode }} 
-                        className="certification-embed flex items-center justify-center w-full scale-110"
+                        className="certification-embed flex items-center justify-center w-full"
                     />
                 </div>
                 <div className="text-center mb-4">
@@ -113,27 +113,10 @@ const Certifications = () => {
 
     useEffect(() => {
         if (!loading && certifications.length > 0) {
-            certifications.forEach(cert => {
-                if (cert.isEmbedded && cert.embedCode) {
-                    const doc = new DOMParser().parseFromString(cert.embedCode, 'text/html');
-                    const scripts = doc.querySelectorAll('script');
-                    
-                    scripts.forEach(oldScript => {
-                        const script = document.createElement('script');
-                        if (oldScript.src) {
-                            // Check if script already exists
-                            if (!document.querySelector(`script[src="${oldScript.src}"]`)) {
-                                script.src = oldScript.src;
-                                script.async = true;
-                                document.body.appendChild(script);
-                            }
-                        } else {
-                            script.textContent = oldScript.textContent;
-                            document.body.appendChild(script);
-                        }
-                    });
-                }
-            });
+            // Trigger Credly re-scan if it exists
+            if (window.Credly && typeof window.Credly.render === 'function') {
+                window.Credly.render();
+            }
         }
     }, [loading, certifications]);
 
