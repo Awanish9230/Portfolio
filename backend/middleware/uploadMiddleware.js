@@ -17,11 +17,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const storage = CloudinaryStorage({
-    cloudinary: { v2: cloudinary }, // v2.2.1 expects an object with a .v2 property
-    folder: 'portfolio/certifications',
-    resource_type: 'image', // Use 'image' for PDFs too - this allows Cloudinary to generate thumbnails!
-});
+const storage = multer.memoryStorage();
 
 function checkFileType(file, cb) {
     const filetypes = /jpg|jpeg|png|mp4|mkv|pdf|doc|docx/;

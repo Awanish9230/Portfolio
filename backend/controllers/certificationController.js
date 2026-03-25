@@ -12,13 +12,33 @@ const getCertifications = async (req, res) => {
     }
 };
 
+const cloudinary = require('cloudinary').v2;
+const { promisify } = require('util');
+
+// Helper to upload buffer to Cloudinary
+const uploadToCloudinary = (buffer, folder) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { 
+                folder,
+                resource_type: 'image' // Use 'image' for PDF thumbnails/previews
+            },
+            (error, result) => {
+                if (result) resolve(result);
+                else reject(error);
+            }
+        );
+        stream.end(buffer);
+    });
+};
+
 // @desc    Create a certification
 // @route   POST /api/certifications
 // @access  Private/Admin
 const createCertification = async (req, res) => {
     try {
         console.log('Received Certification Body:', req.body);
-        console.log('Received Certification Files:', req.files);
+        console.log('Received Certification Files (Keys):', req.files ? Object.keys(req.files) : 'None');
         
         const certificationData = { ...req.body };
 
@@ -28,12 +48,12 @@ const createCertification = async (req, res) => {
 
         if (req.files) {
             if (req.files.image && req.files.image[0]) {
-                const img = req.files.image[0];
-                certificationData.certificateImage = img.secure_url || img.url || img.path;
+                const result = await uploadToCloudinary(req.files.image[0].buffer, 'portfolio/certifications');
+                certificationData.certificateImage = result.secure_url || result.url;
             }
             if (req.files.pdf && req.files.pdf[0]) {
-                const pdf = req.files.pdf[0];
-                certificationData.certificatePDF = pdf.secure_url || pdf.url || pdf.path;
+                const result = await uploadToCloudinary(req.files.pdf[0].buffer, 'portfolio/certifications');
+                certificationData.certificatePDF = result.secure_url || result.url;
             }
         }
 
@@ -44,7 +64,7 @@ const createCertification = async (req, res) => {
         res.status(201).json(createdCertification);
     } catch (error) {
         console.error('Save Certification Error:', error);
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ message: error.message || 'Error uploading to Cloudinary' });
     }
 };
 
@@ -64,12 +84,12 @@ const updateCertification = async (req, res) => {
 
             if (req.files) {
                 if (req.files.image && req.files.image[0]) {
-                    const img = req.files.image[0];
-                    updateData.certificateImage = img.secure_url || img.url || img.path;
+                    const result = await uploadToCloudinary(req.files.image[0].buffer, 'portfolio/certifications');
+                    updateData.certificateImage = result.secure_url || result.url;
                 }
                 if (req.files.pdf && req.files.pdf[0]) {
-                    const pdf = req.files.pdf[0];
-                    updateData.certificatePDF = pdf.secure_url || pdf.url || pdf.path;
+                    const result = await uploadToCloudinary(req.files.pdf[0].buffer, 'portfolio/certifications');
+                    updateData.certificatePDF = result.secure_url || result.url;
                 }
             }
 
