@@ -37,10 +37,13 @@ const createCertification = async (req, res) => {
             }
         }
 
+        console.log('Final Certification Data to Save:', certificationData);
+
         const certification = new Certification(certificationData);
         const createdCertification = await certification.save();
         res.status(201).json(createdCertification);
     } catch (error) {
+        console.error('Save Certification Error:', error);
         res.status(400).json({ message: error.message });
     }
 };
@@ -69,6 +72,8 @@ const updateCertification = async (req, res) => {
                     updateData.certificatePDF = pdf.secure_url || pdf.url || pdf.path;
                 }
             }
+
+            console.log('Final Update Data:', updateData);
 
             Object.assign(certification, updateData);
             const updatedCertification = await certification.save();

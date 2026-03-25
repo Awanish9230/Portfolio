@@ -16,7 +16,7 @@ cloudinary.config({
 const storage = CloudinaryStorage({
     cloudinary: { v2: cloudinary }, // v2.2.1 expects an object with a .v2 property
     folder: 'portfolio/certifications',
-    allowedFormats: ['jpg', 'png', 'pdf', 'jpeg'],
+    resource_type: 'image', // Use 'image' for PDFs too - this allows Cloudinary to generate thumbnails!
 });
 
 function checkFileType(file, cb) {

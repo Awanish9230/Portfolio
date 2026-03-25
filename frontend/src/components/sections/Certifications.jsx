@@ -3,92 +3,107 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaCertificate, FaAward, FaExternalLinkAlt, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import api from '../../utils/api';
 
-const CertificationCard = ({ cert }) => (
-    <div className="bg-surface-light dark:bg-surface-dark p-6 rounded-3xl border border-gray-100 dark:border-neutral-800 shadow-xl hover:shadow-2xl transition-all group overflow-hidden relative h-full">
-        {cert.isEmbedded ? (
-            <div className="flex flex-col h-full relative z-10">
-                <div className="flex-grow flex items-center justify-center min-h-[200px] bg-primary/5 rounded-2xl p-2 overflow-hidden shadow-inner mb-6">
-                    <div 
-                        dangerouslySetInnerHTML={{ __html: cert.embedCode }} 
-                        className="certification-embed flex items-center justify-center w-full"
-                    />
-                </div>
-                <div className="text-center mb-4">
-                    <h3 className="text-lg font-bold text-text-light dark:text-text-dark line-clamp-2">{cert.title}</h3>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{cert.issuingOrganization}</p>
-                </div>
-                {cert.certificatePDF && (
-                    <div className="mt-auto pt-4 border-t border-gray-100 dark:border-neutral-800">
-                        <a 
-                            href={cert.certificatePDF} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="w-full py-2 flex items-center justify-center text-xs font-bold text-primary hover:bg-primary/5 rounded-xl transition-all"
-                        >
-                            View Document PDF
-                        </a>
-                    </div>
-                )}
-            </div>
-        ) : (
-            <div className="h-full flex flex-col relative z-10">
-                <div className="relative group/img mb-6 overflow-hidden rounded-2xl bg-primary/5 aspect-video flex items-center justify-center">
-                    {cert.certificateImage ? (
-                        <img 
-                            src={cert.certificateImage} 
-                            alt={cert.title} 
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+const CertificationCard = ({ cert }) => {
+    const getCertificateImage = (certification) => {
+        if (certification.certificateImage) return certification.certificateImage;
+        if (certification.certificatePDF) {
+            // Cloudinary: convert PDF to JPG thumbnail (page 1)
+            return certification.certificatePDF
+                .replace(/\.pdf$/, '.jpg')
+                .replace(/\/upload\//, '/upload/w_600,h_800,c_fill,pg_1,q_auto,f_auto/');
+        }
+        return null;
+    };
+
+    const previewImage = getCertificateImage(cert);
+
+    return (
+        <div className="bg-surface-light dark:bg-surface-dark p-6 rounded-3xl border border-gray-100 dark:border-neutral-800 shadow-xl hover:shadow-2xl transition-all group overflow-hidden relative h-full">
+            {cert.isEmbedded ? (
+                <div className="flex flex-col h-full relative z-10">
+                    <div className="flex-grow flex items-center justify-center min-h-[220px] bg-transparent rounded-2xl overflow-hidden mb-6">
+                        <div 
+                            dangerouslySetInnerHTML={{ __html: cert.embedCode }} 
+                            className="certification-embed flex items-center justify-center w-full"
                         />
-                    ) : (
-                        <div className="text-primary group-hover:scale-110 transition-transform duration-500">
-                            <FaAward size={40} />
-                        </div>
-                    )}
+                    </div>
+                    <div className="text-center mb-4">
+                        <h3 className="text-lg font-bold text-text-light dark:text-text-dark line-clamp-2">{cert.title}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{cert.issuingOrganization}</p>
+                    </div>
                     {cert.certificatePDF && (
-                        <div className="absolute inset-0 bg-primary/80 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                        <div className="mt-auto pt-4 border-t border-gray-100 dark:border-neutral-800">
                             <a 
                                 href={cert.certificatePDF} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="px-4 py-2 bg-white text-primary rounded-full text-xs font-bold shadow-lg transform translate-y-4 group-hover/img:translate-y-0 transition-transform"
+                                className="w-full py-2 flex items-center justify-center text-xs font-bold text-primary hover:bg-primary/5 rounded-xl transition-all"
                             >
-                                View PDF
+                                View Full Document (PDF)
                             </a>
                         </div>
                     )}
                 </div>
-                <h3 className="text-xl font-bold text-text-light dark:text-text-dark mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                    {cert.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 font-medium mb-4">
-                    {cert.issuingOrganization}
-                </p>
-                
-                <div className="mt-auto pt-6 border-t border-gray-100 dark:border-neutral-800 flex justify-between items-center">
-                    <div className="text-xs text-gray-500 dark:text-gray-500 font-bold uppercase tracking-widest">
-                        Issued: {cert.issueDate}
+            ) : (
+                <div className="h-full flex flex-col relative z-10">
+                    <div className="relative group/img mb-6 overflow-hidden rounded-2xl bg-primary/5 aspect-video flex items-center justify-center">
+                        {previewImage ? (
+                            <img 
+                                src={previewImage} 
+                                alt={cert.title} 
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            />
+                        ) : (
+                            <div className="text-primary group-hover:scale-110 transition-transform duration-500">
+                                <FaAward size={40} />
+                            </div>
+                        )}
+                        {cert.certificatePDF && (
+                            <div className="absolute inset-0 bg-primary/80 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
+                                <a 
+                                    href={cert.certificatePDF} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="px-6 py-2.5 bg-white text-primary rounded-full text-xs font-bold shadow-2xl transform translate-y-4 group-hover/img:translate-y-0 transition-transform flex items-center"
+                                >
+                                    Open Full PDF
+                                </a>
+                            </div>
+                        )}
                     </div>
-                    {cert.credentialURL && (
-                        <a 
-                            href={cert.credentialURL} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="p-2 bg-primary/10 text-primary rounded-lg hover:bg-primary hover:text-white transition-all"
-                            title="Verify Credential"
-                        >
-                            <FaExternalLinkAlt size={12} />
-                        </a>
-                    )}
+                    <h3 className="text-xl font-bold text-text-light dark:text-text-dark mb-1 group-hover:text-primary transition-colors line-clamp-2">
+                        {cert.title}
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 font-medium mb-4">
+                        {cert.issuingOrganization}
+                    </p>
+                    
+                    <div className="mt-auto pt-6 border-t border-gray-100 dark:border-neutral-800 flex justify-between items-center">
+                        <div className="text-xs text-gray-500 dark:text-gray-500 font-bold uppercase tracking-widest">
+                            Issued: {cert.issueDate}
+                        </div>
+                        {cert.credentialURL && (
+                            <a 
+                                href={cert.credentialURL} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="p-2 bg-primary/10 text-primary rounded-lg hover:bg-primary hover:text-white transition-all"
+                                title="Verify Credential"
+                            >
+                                <FaExternalLinkAlt size={12} />
+                            </a>
+                        )}
+                    </div>
                 </div>
+            )}
+            
+            {/* Decorative background element */}
+            <div className="absolute -bottom-6 -right-6 text-gray-100 dark:text-neutral-800/10 group-hover:text-primary/5 transition-colors pointer-events-none">
+                <FaCertificate size={120} />
             </div>
-        )}
-        
-        {/* Decorative background element */}
-        <div className="absolute -bottom-6 -right-6 text-gray-100 dark:text-neutral-800/10 group-hover:text-primary/5 transition-colors pointer-events-none">
-            <FaCertificate size={120} />
         </div>
-    </div>
-);
+    );
+};
 
 const Certifications = () => {
     const [certifications, setCertifications] = useState([]);
@@ -111,14 +126,35 @@ const Certifications = () => {
         fetchCertifications();
     }, []);
 
+    // Effect to handle script execution and re-rendering for embeds
     useEffect(() => {
         if (!loading && certifications.length > 0) {
-            // Trigger Credly re-scan if it exists
-            if (window.Credly && typeof window.Credly.render === 'function') {
-                window.Credly.render();
-            }
+            // Short delay to allow React to update the DOM with dangerouslySetInnerHTML
+            const timer = setTimeout(() => {
+                // Trigger Credly re-scan
+                if (window.Credly && typeof window.Credly.render === 'function') {
+                    window.Credly.render();
+                } else {
+                    // Fallback: manually look for scripts in embeds and re-inject them if they haven't run
+                    const embeds = document.querySelectorAll('.certification-embed');
+                    embeds.forEach(embed => {
+                        const scripts = embed.getElementsByTagName('script');
+                        for (let i = 0; i < scripts.length; i++) {
+                            const newScript = document.createElement('script');
+                            if (scripts[i].src) {
+                                newScript.src = scripts[i].src;
+                            } else {
+                                newScript.textContent = scripts[i].textContent;
+                            }
+                            document.body.appendChild(newScript);
+                        }
+                    });
+                }
+            }, 500);
+
+            return () => clearTimeout(timer);
         }
-    }, [loading, certifications]);
+    }, [loading, certifications, isExpanded, activeIndex]);
 
     const nextSlide = useCallback(() => {
         setActiveIndex((prev) => (prev + 1) % certifications.length);
