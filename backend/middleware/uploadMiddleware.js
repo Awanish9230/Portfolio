@@ -13,28 +13,10 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: async (req, file) => {
-        const extname = path.extname(file.originalname).toLowerCase();
-
-        let folder = 'portfolio/images';
-        let resource_type = 'image';
-
-        if (extname === '.mp4' || extname === '.mkv') {
-            folder = 'portfolio/videos';
-            resource_type = 'video';
-        } else if (extname === '.pdf' || extname === '.doc' || extname === '.docx') {
-            folder = 'portfolio/documents';
-            resource_type = 'raw';
-        }
-
-        return {
-            folder: folder,
-            resource_type: resource_type,
-            public_id: `${file.fieldname}-${Date.now()}`,
-        };
-    },
+const storage = CloudinaryStorage({
+    cloudinary: { v2: cloudinary }, // v2.2.1 expects an object with a .v2 property
+    folder: 'portfolio/certifications',
+    allowedFormats: ['jpg', 'png', 'pdf', 'jpeg'],
 });
 
 function checkFileType(file, cb) {

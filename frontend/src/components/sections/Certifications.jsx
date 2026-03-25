@@ -115,23 +115,23 @@ const Certifications = () => {
         if (!loading && certifications.length > 0) {
             certifications.forEach(cert => {
                 if (cert.isEmbedded && cert.embedCode) {
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = cert.embedCode;
-                    const scripts = tempDiv.getElementsByTagName('script');
-                    for (let i = 0; i < scripts.length; i++) {
+                    const doc = new DOMParser().parseFromString(cert.embedCode, 'text/html');
+                    const scripts = doc.querySelectorAll('script');
+                    
+                    scripts.forEach(oldScript => {
                         const script = document.createElement('script');
-                        if (scripts[i].src) {
-                            const existingScript = document.querySelector(`script[src="${scripts[i].src}"]`);
-                            if (!existingScript) {
-                                script.src = scripts[i].src;
+                        if (oldScript.src) {
+                            // Check if script already exists
+                            if (!document.querySelector(`script[src="${oldScript.src}"]`)) {
+                                script.src = oldScript.src;
                                 script.async = true;
                                 document.body.appendChild(script);
                             }
                         } else {
-                            script.textContent = scripts[i].textContent;
+                            script.textContent = oldScript.textContent;
                             document.body.appendChild(script);
                         }
-                    }
+                    });
                 }
             });
         }

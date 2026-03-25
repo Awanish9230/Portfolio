@@ -227,6 +227,9 @@ const AdminDashboard = () => {
 
     const handleCertificationSubmit = async (e) => {
         e.preventDefault();
+        console.log('🚀 SUBMITTING CERTIFICATION FORM');
+        console.log('Form State:', certificationForm);
+        
         const formData = new FormData();
         
         Object.keys(certificationForm).forEach(key => {
@@ -248,20 +251,21 @@ const AdminDashboard = () => {
 
         try {
             if (editingCertification) {
-                await api.put(`/certifications/${editingCertification}`, formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
+                console.log('Sending PUT request to:', `/certifications/${editingCertification}`);
+                await api.put(`/certifications/${editingCertification}`, formData);
                 addToast('Certification updated successfully', 'success');
             } else {
-                await api.post('/certifications', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                });
+                console.log('Sending POST request to /certifications');
+                await api.post('/certifications', formData);
                 addToast('Certification added successfully', 'success');
             }
+            console.log('Request successful!');
             resetCertificationForm();
             fetchData();
         } catch (error) {
-            addToast(editingCertification ? 'Failed to update certification' : 'Failed to add certification', 'error');
+            console.error('Certification Submit Error:', error);
+            const errorMsg = error.response?.data?.message || error.message;
+            addToast(`${editingCertification ? 'Failed to update' : 'Failed to add'} certification: ${errorMsg}`, 'error');
         }
     };
 
@@ -703,6 +707,18 @@ const AdminDashboard = () => {
                                                                 </>
                                                             )}
                                                             <span className="px-2 py-0.5 rounded bg-gray-100 dark:bg-neutral-800 uppercase tracking-tighter">{cert.isEmbedded ? 'Embedded' : 'Manual'}</span>
+                                                            {cert.certificatePDF && (
+                                                                <span className="flex items-center text-green-600 dark:text-green-500 font-bold ml-2">
+                                                                    <span className="w-1 h-1 bg-gray-300 rounded-full mr-2"></span>
+                                                                    PDF Attached
+                                                                </span>
+                                                            )}
+                                                            {cert.certificateImage && (
+                                                                <span className="flex items-center text-blue-600 dark:text-blue-500 font-bold ml-2">
+                                                                    <span className="w-1 h-1 bg-gray-300 rounded-full mr-2"></span>
+                                                                    Image
+                                                                </span>
+                                                            )}
                                                         </div>
                                                     </div>
                                                 </div>

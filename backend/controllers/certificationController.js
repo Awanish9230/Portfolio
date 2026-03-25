@@ -17,6 +17,9 @@ const getCertifications = async (req, res) => {
 // @access  Private/Admin
 const createCertification = async (req, res) => {
     try {
+        console.log('Received Certification Body:', req.body);
+        console.log('Received Certification Files:', req.files);
+        
         const certificationData = { ...req.body };
 
         if (typeof certificationData.isEmbedded === 'string') {
