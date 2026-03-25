@@ -19,6 +19,10 @@ const createCertification = async (req, res) => {
     try {
         const certificationData = { ...req.body };
 
+        if (typeof certificationData.isEmbedded === 'string') {
+            certificationData.isEmbedded = certificationData.isEmbedded === 'true';
+        }
+
         if (req.files) {
             if (req.files.image && req.files.image[0]) {
                 certificationData.certificateImage = req.files.image[0].path;
@@ -45,6 +49,10 @@ const updateCertification = async (req, res) => {
 
         if (certification) {
             const updateData = { ...req.body };
+
+            if (typeof updateData.isEmbedded === 'string') {
+                updateData.isEmbedded = updateData.isEmbedded === 'true';
+            }
 
             if (req.files) {
                 if (req.files.image && req.files.image[0]) {

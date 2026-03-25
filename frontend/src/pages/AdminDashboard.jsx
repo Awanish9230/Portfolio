@@ -231,11 +231,18 @@ const AdminDashboard = () => {
         
         Object.keys(certificationForm).forEach(key => {
             if (key === 'certificateImage') {
-                if (certificationForm[key]) formData.append('image', certificationForm[key]);
+                if (certificationForm[key] instanceof File) {
+                    formData.append('image', certificationForm[key]);
+                }
             } else if (key === 'certificatePDF') {
-                if (certificationForm[key]) formData.append('pdf', certificationForm[key]);
-            } else {
-                formData.append(key, certificationForm[key]);
+                if (certificationForm[key] instanceof File) {
+                    formData.append('pdf', certificationForm[key]);
+                }
+            } else if (key !== 'certificateImage' && key !== 'certificatePDF') {
+                // Ensure null values are not sent as strings
+                if (certificationForm[key] !== null && certificationForm[key] !== undefined) {
+                    formData.append(key, certificationForm[key]);
+                }
             }
         });
 
