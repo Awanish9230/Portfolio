@@ -20,7 +20,16 @@ const About = () => {
 
     const getDownloadableResume = (url) => {
         if (url && url.includes('cloudinary.com')) {
-            return url.replace('/upload/', '/upload/fl_attachment/');
+            if (url.includes('/raw/upload/')) {
+                return url; // Transformations not supported on raw files
+            }
+            // Add attachment flag to force download
+            let transformedUrl = url.replace('/upload/', '/upload/fl_attachment/');
+            // Ensure the extension is .pdf
+            if (!transformedUrl.endsWith('.pdf')) {
+                transformedUrl = transformedUrl.replace(/\.[^/.]+$/, '.pdf');
+            }
+            return transformedUrl;
         }
         return url;
     };

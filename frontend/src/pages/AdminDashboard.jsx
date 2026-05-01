@@ -788,13 +788,13 @@ const AdminDashboard = () => {
 
                             {/* Settings Tab */}
                             {activeTab === 'settings' && (
-                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                <form onSubmit={handleSettingsSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                     <div className="lg:col-span-2 space-y-8">
                                         <div className="bg-white dark:bg-surface-dark p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-neutral-800 transition-colors">
                                             <h3 className="text-xl font-bold mb-8 text-gray-900 dark:text-white flex items-center">
                                                 <FaCog className="mr-3 text-primary" /> Profile Credentials
                                             </h3>
-                                            <form onSubmit={handleSettingsSubmit} className="space-y-6">
+                                            <div className="space-y-6">
                                                 <div className="space-y-2">
                                                     <label className="block text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest ml-1">Email Authority</label>
                                                     <input
@@ -828,17 +828,12 @@ const AdminDashboard = () => {
                                                         />
                                                     </div>
                                                 </div>
-                                                <div className="pt-6">
-                                                    <button type="submit" className="w-full py-4 px-6 bg-primary text-white rounded-2xl hover:bg-indigo-700 transition-all font-bold shadow-lg shadow-primary/25 text-sm sm:text-base">
-                                                        Secure & Update Profile
-                                                    </button>
-                                                </div>
-                                            </form>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div className="space-y-8">
-                                        <div className="bg-white dark:bg-surface-dark p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-neutral-800 transition-colors">
+                                        <div className="bg-white dark:bg-surface-dark p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-neutral-800 transition-colors h-full">
                                             <h4 className="font-bold text-gray-900 dark:text-white mb-6 text-sm">Document Assets</h4>
                                             <div className="space-y-6">
                                                 <div className="p-4 rounded-2xl bg-gray-50 dark:bg-neutral-900 border border-transparent hover:border-primary/20 transition-all group">
@@ -854,7 +849,7 @@ const AdminDashboard = () => {
                                                     <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Curriculum Vitae (PDF)</label>
                                                     <input
                                                         type="file"
-                                                        accept=".pdf,.doc,.docx"
+                                                        accept=".pdf"
                                                         className="w-full text-[10px] text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-full file:border-0 file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-all font-medium"
                                                         onChange={e => setSettingsForm({ ...settingsForm, resume: e.target.files[0] })}
                                                     />
@@ -862,7 +857,13 @@ const AdminDashboard = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+
+                                    <div className="lg:col-span-3">
+                                        <button type="submit" className="w-full py-4 px-6 bg-primary text-white rounded-2xl hover:bg-indigo-700 transition-all font-bold shadow-lg shadow-primary/25 text-sm sm:text-base">
+                                            Secure & Update Profile
+                                        </button>
+                                    </div>
+                                </form>
                             )}
                         </motion.div>
                     </AnimatePresence>

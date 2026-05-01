@@ -32,10 +32,15 @@ const Hero = () => {
 
     const getDownloadableResume = (url) => {
         if (url && url.includes('cloudinary.com')) {
-            // Force PDF format and add attachment flag
-            let transformedUrl = url.replace('/upload/', '/upload/fl_attachment,f_pdf/');
+            if (url.includes('/raw/upload/')) {
+                return url; // Transformations not supported on raw files
+            }
+            // Add attachment flag to force download
+            let transformedUrl = url.replace('/upload/', '/upload/fl_attachment/');
             // Ensure the extension is .pdf
-            transformedUrl = transformedUrl.replace(/\.[^/.]+$/, '.pdf');
+            if (!transformedUrl.endsWith('.pdf')) {
+                transformedUrl = transformedUrl.replace(/\.[^/.]+$/, '.pdf');
+            }
             return transformedUrl;
         }
         return url;
