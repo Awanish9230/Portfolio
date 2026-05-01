@@ -468,7 +468,7 @@ const AdminDashboard = () => {
                                                 value={project}
                                                 className="bg-white dark:bg-surface-dark p-4 rounded-3xl border border-gray-100 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all flex items-center justify-between group"
                                             >
-                                                <div className="flex items-center space-x-4 flex-grow">
+                                                <div className="flex items-center space-x-4 flex-grow min-w-0">
                                                     <div className="cursor-grab active:cursor-grabbing text-gray-300 dark:text-neutral-700 hover:text-gray-400">
                                                         <FaGripVertical size={18} />
                                                     </div>
@@ -497,7 +497,7 @@ const AdminDashboard = () => {
                                                     </div>
                                                 </div>
 
-                                                <div className="flex items-center space-x-3 ml-4">
+                                                <div className="flex items-center space-x-3 ml-4 flex-shrink-0">
                                                     <button 
                                                         onClick={() => handleProjectPin(project._id)} 
                                                         title={project.isPinned ? "Unpin Project" : "Pin to Top"}
@@ -573,12 +573,12 @@ const AdminDashboard = () => {
                                     <div className="space-y-4">
                                         {experiences.map(exp => (
                                             <div key={exp._id} className="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-gray-100 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all flex justify-between items-center group">
-                                                <div className="flex items-center space-x-6">
-                                                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 group-hover:scale-110 transition-transform font-bold italic">
+                                                <div className="flex items-center space-x-6 flex-grow min-w-0">
+                                                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 group-hover:scale-110 transition-transform font-bold italic">
                                                         {exp.organization.charAt(0)}
                                                     </div>
-                                                    <div>
-                                                        <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors">{exp.title}</h3>
+                                                    <div className="min-w-0">
+                                                        <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">{exp.title}</h3>
                                                         <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
                                                             <span className="font-medium text-gray-700 dark:text-gray-300">{exp.organization}</span>
                                                             <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
@@ -587,7 +587,7 @@ const AdminDashboard = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 ml-4">
                                                     <button onClick={() => handleExperienceEdit(exp)} className="p-2 bg-blue-50 dark:bg-blue-500/10 text-blue-500 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors">
                                                         <FaEdit size={16} />
                                                     </button>
@@ -692,12 +692,12 @@ const AdminDashboard = () => {
                                     <div className="space-y-4">
                                         {certifications.map(cert => (
                                             <div key={cert._id} className="bg-white dark:bg-surface-dark p-6 rounded-2xl border border-gray-100 dark:border-neutral-800 shadow-sm hover:shadow-md transition-all flex justify-between items-center group">
-                                                <div className="flex items-center space-x-6">
-                                                    <div className="w-12 h-12 rounded-xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 border border-orange-100 dark:border-orange-500/20 group-hover:scale-110 transition-transform">
+                                                <div className="flex items-center space-x-6 flex-grow min-w-0">
+                                                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 border border-orange-100 dark:border-orange-500/20 group-hover:scale-110 transition-transform">
                                                         <FaCertificate size={24} />
                                                     </div>
-                                                    <div>
-                                                        <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors">{cert.title}</h3>
+                                                    <div className="min-w-0">
+                                                        <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors truncate">{cert.title}</h3>
                                                         <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
                                                             <span className="font-medium text-gray-700 dark:text-gray-300">{cert.issuingOrganization}</span>
                                                             {cert.issueDate && (
@@ -722,7 +722,7 @@ const AdminDashboard = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 ml-4">
                                                     <button onClick={() => handleCertificationEdit(cert)} className="p-2 bg-blue-50 dark:bg-blue-500/10 text-blue-500 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-500/20 transition-colors">
                                                         <FaEdit size={16} />
                                                     </button>
