@@ -1,4 +1,22 @@
 const Project = require('../models/Project');
+const cloudinary = require('cloudinary').v2;
+
+// Helper to upload buffer to Cloudinary
+const uploadToCloudinary = (buffer, folder) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { 
+                folder,
+                resource_type: 'auto' 
+            },
+            (error, result) => {
+                if (result) resolve(result);
+                else reject(error);
+            }
+        );
+        stream.end(buffer);
+    });
+};
 
 // @desc    Get all projects
 // @route   GET /api/projects
@@ -43,9 +61,15 @@ const createProject = async (req, res) => {
     } = req.body;
 
     let imagesPaths = [];
-    imagesPaths = req.files.map((file) => file.path);
 
     try {
+        if (req.files && req.files.length > 0) {
+            for (const file of req.files) {
+                const result = await uploadToCloudinary(file.buffer, 'portfolio/projects');
+                imagesPaths.push(result.secure_url || result.url);
+            }
+        }
+
         const project = new Project({
             title,
             shortDescription,
@@ -81,7 +105,11 @@ const updateProject = async (req, res) => {
             project.liveLink = req.body.liveLink || project.liveLink;
 
             if (req.files && req.files.length > 0) {
-                const newImages = req.files.map((file) => file.path);
+                const newImages = [];
+                for (const file of req.files) {
+                    const result = await uploadToCloudinary(file.buffer, 'portfolio/projects');
+                    newImages.push(result.secure_url || result.url);
+                }
                 project.images = [...project.images, ...newImages];
             }
 

@@ -1,5 +1,23 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const cloudinary = require('cloudinary').v2;
+
+// Helper to upload buffer to Cloudinary
+const uploadToCloudinary = (buffer, folder) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { 
+                folder,
+                resource_type: 'auto' 
+            },
+            (error, result) => {
+                if (result) resolve(result);
+                else reject(error);
+            }
+        );
+        stream.end(buffer);
+    });
+};
 
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -73,10 +91,12 @@ const updateUserProfile = async (req, res) => {
 
         if (req.files) {
             if (req.files.profileImage && req.files.profileImage[0]) {
-                user.profileImage = req.files.profileImage[0].path;
+                const result = await uploadToCloudinary(req.files.profileImage[0].buffer, 'portfolio/admin');
+                user.profileImage = result.secure_url || result.url;
             }
             if (req.files.resume && req.files.resume[0]) {
-                user.resume = req.files.resume[0].path;
+                const result = await uploadToCloudinary(req.files.resume[0].buffer, 'portfolio/admin');
+                user.resume = result.secure_url || result.url;
             }
         }
 
