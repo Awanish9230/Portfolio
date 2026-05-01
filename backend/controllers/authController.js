@@ -3,12 +3,13 @@ const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary').v2;
 
 // Helper to upload buffer to Cloudinary
-const uploadToCloudinary = (buffer, folder) => {
+const uploadToCloudinary = (buffer, folder, options = {}) => {
     return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
             { 
                 folder,
-                resource_type: 'auto' 
+                resource_type: 'auto',
+                ...options
             },
             (error, result) => {
                 if (result) resolve(result);
@@ -95,7 +96,11 @@ const updateUserProfile = async (req, res) => {
                 user.profileImage = result.secure_url || result.url;
             }
             if (req.files.resume && req.files.resume[0]) {
-                const result = await uploadToCloudinary(req.files.resume[0].buffer, 'portfolio/admin');
+                const options = {
+                    resource_type: 'raw',
+                    public_id: `resume_${Date.now()}.pdf`
+                };
+                const result = await uploadToCloudinary(req.files.resume[0].buffer, 'portfolio/admin', options);
                 user.resume = result.secure_url || result.url;
             }
         }
